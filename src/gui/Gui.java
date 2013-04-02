@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,6 +35,7 @@ public class Gui extends JFrame
 	 * Constructora por defecto: tablero 9x9
 	 * 
 	 * @param controlador
+	 * @wbp.parser.constructor
 	 */
 	public Gui(Controlador controlador)
 	{
@@ -71,7 +73,7 @@ public class Gui extends JFrame
 	private JPanel obtenerPanelPrincipal()
 	{
 		panelPrincipal = new JPanel();
-		//panelPrincipal.setLayout(new GridLayout(0, 2, 0, 0));	
+		panelPrincipal.setLayout(new GridLayout(0, 1, 0, 0));	
 		panelPrincipal.add(this.sudokiGrid);
 		return panelPrincipal;
 	}
