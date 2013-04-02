@@ -9,9 +9,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import controlador.Controlador;
+
 public class Gui extends JFrame
 {
-
+	private Controlador controlador;
+	
 	private static final long serialVersionUID = 1L;
 	
 	private SudokuGrid sudokiGrid;
@@ -29,8 +32,10 @@ public class Gui extends JFrame
 
 	/**
 	 * Constructora por defecto: tablero 9x9
+	 * 
+	 * @param controlador
 	 */
-	public Gui()
+	public Gui(Controlador controlador)
 	{
 		super();
 		this.sudokiGrid = new SudokuGrid(CELDAS_ANCHO, CELDAS_ALTO);
@@ -39,10 +44,12 @@ public class Gui extends JFrame
 	
 	/**
 	 * Crear una interfaz con un tablero de nxm
+	 * 
+	 * @param controlador
 	 * @param n
 	 * @param m
 	 */
-	public Gui(int n, int m)
+	public Gui(Controlador controlador, int n, int m)
 	{
 		super();
 		this.sudokiGrid = new SudokuGrid(n, m);
