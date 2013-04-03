@@ -1,9 +1,9 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class SudokuCell extends JPanel
@@ -20,11 +20,17 @@ public class SudokuCell extends JPanel
         this.x = x;
         this.y = y;
 
+        /* DEBUG */
+        this.num = 3;
+        this.add(new JLabel( String.valueOf(num)) );
+        /* *** */
+        
         /* create a black border */
         setBorder(BorderFactory.createLineBorder(Color.black));
-
+        
+        
         /* set size to 50x50 pixel for one square */
-        setPreferredSize(new Dimension(50,50));
+        //setPreferredSize(new Dimension(50,50));
     }
 
     /* Getters & Setters */

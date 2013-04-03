@@ -5,17 +5,18 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 class SudokuGrid extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	private SudokuCell[][] casillas;
+	private int[][] tablero;
 	
 	SudokuGrid(int n, int m) 
     {
         super();
         this.setLayout(new GridLayout(n,m));
-        casillas = new SudokuCell[n][m];
+        tablero = new int[n][m];
         
         /** construct the grid */
         /*
@@ -31,12 +32,14 @@ class SudokuGrid extends JPanel
         }
         */
         
-        
-        
+        JTextArea cell;
         for (int i=0; i<n; i++) {
             for (int j=0; j<m; j++) {
-            	casillas[i][j] = new SudokuCell(i, j);
-            	this.add(casillas[i][j]);
+            	
+            	//this.add(cell);
+            	cell = new JTextArea("A");
+            	cell.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            	this.add(cell);
             }
         }
         
