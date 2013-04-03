@@ -139,7 +139,7 @@ public class AlgoritmoGenetico
 		Cromosoma[] pob = new Cromosoma[tam];
 		
 		for (int i = 0; i < tam; i++) {
-			pob[i] = new Cromosoma();
+			pob[i] = new Cromosoma(param.getFijos());
 		}		
 		return pob;
 	}
@@ -284,8 +284,8 @@ public class AlgoritmoGenetico
 	{
 		
 		//Inicializamos los hijos
-		Cromosoma hijo=new Cromosoma();
-		Cromosoma hija=new Cromosoma();
+		Cromosoma hijo=new Cromosoma(parametros.getFijos());
+		Cromosoma hija=new Cromosoma(parametros.getFijos());
 		
 		// primera parte del intercambio: 
 		// copiar progenitor desde el principio hasta el punto de cruce

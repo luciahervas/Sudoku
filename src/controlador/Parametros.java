@@ -10,14 +10,15 @@ package controlador;
  *  | int  	 | generaciones 				| 50 					|
  *  | double | cruce 						| 0.6 					|
  *  | double | mutacion 					| 0.05 					|
- *  | double | tolerancia					| 0.01 					|
  *  | double | elitismo 					| 0.0					|
- *  | int	 | funcion						| 1 					|
  *  | int    | seleccion					| 1 					|
+ *  | byte[] | fijos
+ *  
  * Nota: llamar a la contructora vacia para asignar los valores por defecto 
  * 	
  */
-public class Parametros {
+public class Parametros 
+{
 	/* Algoritmos de seleccion disponibles */
 	private int[] valoresSeleccion = {0,1};
 	
@@ -36,6 +37,7 @@ public class Parametros {
 	private double probMutacion;
 	private double elitismo;
 	private int seleccion;
+	private byte[] fijos;
 	
 	/**
 	 * 
@@ -83,6 +85,8 @@ public class Parametros {
 	public void setProbMutacion(double probMutacion) { this.probMutacion = probMutacion; }
 	public double getElitismo() { return this.elitismo; }
 	public void setElitismo(double elitismo) { this.elitismo = elitismo; }
+	public byte[] getFijos() { return this.fijos; }
+	public void setFijos(byte[] fijos) { this.fijos = fijos; }
 	public int getSeleccion() {return this.seleccion; }
 	public void setSeleccion(int seleccion) {
 		if (estaContenido(seleccion)){
