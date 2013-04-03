@@ -1,7 +1,7 @@
 package controlador;
 
 import gui.Gui;
-import algoritmo.AlgoritmoGenetico;
+import algoritmoGenetico.AlgoritmoGenetico;
 
 public class Controlador 
 {
