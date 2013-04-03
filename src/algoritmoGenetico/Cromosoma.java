@@ -32,28 +32,13 @@ public class Cromosoma
 		public Gen(byte[] fijos)
 		{
 			this.fijos = fijos;
-			boolean[] mascara = new boolean[9];
-			for (int i=0; i<9; i++){
-				if (fijos[i]!=0){
-					mascara[fijos[i]-1]=true;
-					cuadricula[i]=fijos[i];
-				}
-			}
-			byte random=0;
-			boolean randomValido;
 			cuadricula = new byte[9];
 			for(int i=0; i<9; i++){
 				if (fijos[i]==0){
-					randomValido = false;
-					while(!randomValido) {
-						random = (byte)Operaciones.aleatorioEntre(1, 9);
-						if (!mascara[random - 1]){
-							randomValido=true;
-							mascara[random - 1]=true;
-						}
-					}
-					cuadricula[i]=random;
+					cuadricula[i]=(byte)Operaciones.aleatorioEntreExcepto(1,9,fijos);
 				}
+				else
+					cuadricula[i]=fijos[i];
 			}
 		}
 		
@@ -197,9 +182,13 @@ public class Cromosoma
 	 * @param j e [0,8]
 	 */
 	public void mutaGen(int j) {
-		// TODO Auto-generated method stub
-		
+		int a = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].fijos);
+		int b = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].fijos);
+		byte aux = this.genes[j].cuadricula[a];
+		this.genes[j].cuadricula[a] = this.genes[j].cuadricula[b];
+		this.genes[j].cuadricula[b] = aux;
 	}
+	
 	public void setGen(int i, Gen gen) {
 		// TODO Auto-generated method stub
 		
