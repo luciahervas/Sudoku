@@ -28,7 +28,10 @@ public class Parametros
 	public static final double PROB_CRUCE_DEFECTO = 0.7;
 	public static final double PROB_MUTACION_DEFECTO = 0.1;
 	public static final double ELITISMO_DEFECTO = 0.0;
-	public static final int SELECCION_DEFECTO = 1;
+	public static final int FUNC_SELECCION_DEFECTO = 1;
+	public static final int FUNC_CRUCE_DEFECTO = 1;
+	public static final int FUNC_MUTACION_DEFECTO = 1;
+	public static final int FUNC_APTITUD_DEFECTO = 1;
 	
 	/* Atributos */
 	private int tamPoblacion;
@@ -36,8 +39,11 @@ public class Parametros
 	private double probCruce;
 	private double probMutacion;
 	private double elitismo;
-	private int seleccion;
-	private byte[] fijos;
+	private int funcSeleccion;
+	private int funcCruce;
+	private int funcMutacion;
+	private int funcAptitud;
+	private byte[][] fijos;
 	
 	/**
 	 * 
@@ -50,17 +56,17 @@ public class Parametros
 	 * @param funcion
 	 * @param seleccion: 0 para torneo y 1 para ruleta. Cualquier otro valor se tomara un 1.
 	 */
-	public Parametros (int tam, int generaciones, double cruce, double mutacion, double elitismo, int seleccion)
+	public Parametros (int tam, int generaciones, double cruce, double mutacion, double elitismo, int funcSeleccion)
 	{
 		this.tamPoblacion = tam;
 		this.numGeneraciones = generaciones;
 		this.probCruce = cruce;
 		this.probMutacion = mutacion;
 		this.elitismo = elitismo;
-		if (estaContenido(seleccion)) {
-			this.seleccion = seleccion;
+		if (estaContenido(funcSeleccion)) {
+			this.funcSeleccion = funcSeleccion;
 		} else {
-			this.seleccion = SELECCION_DEFECTO;
+			this.funcSeleccion = FUNC_SELECCION_DEFECTO;
 		}
 	}
 	
@@ -71,7 +77,10 @@ public class Parametros
 		this.probCruce = PROB_CRUCE_DEFECTO;
 		this.probMutacion = PROB_MUTACION_DEFECTO;
 		this.elitismo = ELITISMO_DEFECTO;
-		this.seleccion = SELECCION_DEFECTO;
+		this.funcSeleccion = FUNC_SELECCION_DEFECTO;
+		this.funcCruce = FUNC_CRUCE_DEFECTO;
+		this.funcMutacion = FUNC_MUTACION_DEFECTO;
+		this.funcAptitud = FUNC_APTITUD_DEFECTO;
 	}
 	
 	/* Getters & Setters */
@@ -85,15 +94,47 @@ public class Parametros
 	public void setProbMutacion(double probMutacion) { this.probMutacion = probMutacion; }
 	public double getElitismo() { return this.elitismo; }
 	public void setElitismo(double elitismo) { this.elitismo = elitismo; }
-	public byte[] getFijos() { return this.fijos; }
-	public void setFijos(byte[] fijos) { this.fijos = fijos; }
-	public int getSeleccion() {return this.seleccion; }
-	public void setSeleccion(int seleccion) {
-		if (estaContenido(seleccion)){
-			this.seleccion = seleccion;
+	public byte[][] getFijos() { return this.fijos; }
+	public void setFijos(byte[][] fijos) { this.fijos = fijos; }
+	public int getSeleccion() {return this.funcSeleccion; }
+	public void setSeleccion(int funcSeleccion) {
+		if (estaContenido(funcSeleccion)){
+			this.funcSeleccion = funcSeleccion;
 		} else {
-			this.seleccion = SELECCION_DEFECTO;
+			this.funcSeleccion = FUNC_SELECCION_DEFECTO;
 		}
+	}
+
+	public int getFuncSeleccion() {
+		return funcSeleccion;
+	}
+
+	public void setFuncSeleccion(int funcSeleccion) {
+		this.funcSeleccion = funcSeleccion;
+	}
+
+	public int getFuncCruce() {
+		return funcCruce;
+	}
+
+	public void setFuncCruce(int funcCruce) {
+		this.funcCruce = funcCruce;
+	}
+
+	public int getFuncMutacion() {
+		return funcMutacion;
+	}
+
+	public void setFuncMutacion(int funcMutacion) {
+		this.funcMutacion = funcMutacion;
+	}
+
+	public int getFuncAptitud() {
+		return funcAptitud;
+	}
+
+	public void setFuncAptitud(int funcAptitud) {
+		this.funcAptitud = funcAptitud;
 	}
 	
 	/* Funciones auxiliares */

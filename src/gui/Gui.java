@@ -13,12 +13,10 @@ import javax.swing.JPanel;
 import controlador.Controlador;
 
 public class Gui extends JFrame
-{
-	private Controlador controlador;
-	
+{	
 	private static final long serialVersionUID = 1L;
-	
-	private SudokuGrid sudokiGrid;
+
+	private SudokuCanvas tableroJuego;
 	private static final int CELDAS_ANCHO = 9;
 	private static final int CELDAS_ALTO = 9;
 	private static final int FRAME_WEIGHT = 800;
@@ -35,26 +33,11 @@ public class Gui extends JFrame
 	 * Constructora por defecto: tablero 9x9
 	 * 
 	 * @param controlador
-	 * @wbp.parser.constructor
 	 */
 	public Gui(Controlador controlador)
 	{
 		super();
-		this.sudokiGrid = new SudokuGrid(CELDAS_ANCHO, CELDAS_ALTO);
-		crearInterfaz();
-	}
-	
-	/**
-	 * Crear una interfaz con un tablero de nxm
-	 * 
-	 * @param controlador
-	 * @param n
-	 * @param m
-	 */
-	public Gui(Controlador controlador, int n, int m)
-	{
-		super();
-		this.sudokiGrid = new SudokuGrid(n, m);
+		this.tableroJuego = new SudokuCanvas(controlador.getTablero());
 		crearInterfaz();
 	}
 	
@@ -74,7 +57,7 @@ public class Gui extends JFrame
 	{
 		panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new GridLayout(0, 1, 0, 0));	
-		panelPrincipal.add(this.sudokiGrid);
+		panelPrincipal.add(this.tableroJuego);
 		return panelPrincipal;
 	}
 	

@@ -61,11 +61,12 @@ public class Cromosoma
 	private int puntuacionAcumulada;
 	
 	/* Constructoras */
-	public Cromosoma(byte[] fijos){
+	public Cromosoma(byte[][] fijos){
 		genes = new Gen[9];
 		for (int i=0; i<9; i++){
-			genes[i]=new Gen(fijos);
+			genes[i]=new Gen(fijos[i]);
 		}
+		fenotipo = new byte[9][9];
 		evaluarCromosoma(); //Calcula fenotipo y aptitud
 	}
 	public Cromosoma(Gen[] genes, byte[][] fenotipo, int aptitud, int puntuacionAcumulada)
@@ -131,23 +132,48 @@ public class Cromosoma
 			}
 		}
 	}
-	
+
 	private void calcularAptitud()
 	{	
 		int aux=0;
 		//TODO: el parametro de como calcular la aptitud tiene que llegar hasta aqui
-		switch(1) {
+		switch(2) {
 			case 1:
 				aux=calcularAptitudConSumaProducto();
+				this.aptitud = 1000 - aux;
 			break;
 			case 2:
-				//TODO: añadir metodo teniendo en cuenta los repetidos
-			break;
-			default:
-				aux=calcularAptitudConSumaProducto();
+				aux=calcularAptitudConRepetidos();
+				this.aptitud = 81*2 - aux; 
 			break;
 		}				
-		this.aptitud = 1000 - aux; 
+		this.aptitud = aux; 
+		System.out.println(aux);
+	}
+	
+	private int calcularAptitudConRepetidos()
+	{
+		int repetidos=0;
+		boolean[] mascara=new boolean[9];
+		for (int i=0; i<9; i++){
+			for (int j=0; j<9; j++){
+				if (mascara[fenotipo[i][j]-1])
+					repetidos++;
+				else
+					mascara[fenotipo[i][j]-1]=true;
+			}
+			mascara=new boolean[9];
+		}
+		for (int j=0; j<9; j++){
+			for (int i=0; i<9; i++){
+				if (mascara[fenotipo[i][j]-1])
+					repetidos++;
+				else
+					mascara[fenotipo[i][j]-1]=true;
+			}
+			mascara=new boolean[9];
+		}
+		return repetidos;
 	}
 	
 	private int calcularAptitudConSumaProducto()
