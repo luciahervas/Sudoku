@@ -31,6 +31,7 @@ public class AlgoritmoGenetico
 	 * @param parametros del problema
 	 */
 	public void algoritmo_genetico(Parametros parametros) {
+		Cromosoma.setFuncAptitud(parametros.getFuncAptitud());
 		double porcElite = parametros.getElitismo();
 		// Obtenemos la poblacion inicial 
 		Cromosoma[] pob = poblacion_inicial(parametros); 
@@ -50,10 +51,10 @@ public class AlgoritmoGenetico
 			elite = separaMejores(pob,porcElite);
 			
 		// 1) seleccion
-			if (parametros.getSeleccion() == 0)
+			if (parametros.getFuncSeleccion() == 0)
 				pob = seleccionTorneo(pob, parametros);
 			
-			if (parametros.getSeleccion() == 1)
+			if (parametros.getFuncSeleccion() == 1)
 				pob = seleccionRuleta(pob, parametros);
 			
 		// 2) reproduccion
@@ -81,7 +82,8 @@ public class AlgoritmoGenetico
 			mejoresCromosomas[i]=pob[pos_mejor].clone();
 			gokus[i]=mejor.clone();
 			medias[i]=calcularMedia(pob);
-		}
+			System.out.println(pob[pos_mejor].getAptitud());
+		}		
 	}
 
 	/**
@@ -367,7 +369,6 @@ public class AlgoritmoGenetico
 		return pos_mejor;
 	}
 	
-
 	
 	/* Getters */
 	public Cromosoma[] getGokus(){ return this.gokus; }

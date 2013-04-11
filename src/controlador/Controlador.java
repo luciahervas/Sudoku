@@ -13,10 +13,14 @@ public class Controlador
 	public Controlador()
 	{
 		parametros = new Parametros();
-		parametros.setFijos(GeneradorSudokus.enunciadoSudoku());
 		genetico = new AlgoritmoGenetico();
-		genetico.algoritmo_genetico(parametros);
-		//gui = new Gui(this);
+		gui = new Gui(this);
+	}
+	
+	public void ejecutar()
+	{
+		genetico.algoritmo_genetico(gui.getParametros());
+		gui.pintaEsto(genetico.getGokus()[parametros.getNumGeneraciones()-1],gui.getParametros().getFijos());
 	}
 	
 	public byte[][] getTablero(){ return parametros.getFijos(); }

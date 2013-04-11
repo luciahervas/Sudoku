@@ -23,11 +23,11 @@ public class Parametros
 	private int[] valoresSeleccion = {0,1};
 	
 	/* Valores por defecto */
-	public static final int TAM_POBLACION_DEFECTO = 50;
+	public static final int TAM_POBLACION_DEFECTO = 100;
 	public static final int NUM_GENERACIONES_DEFECTO = 100;
 	public static final double PROB_CRUCE_DEFECTO = 0.7;
 	public static final double PROB_MUTACION_DEFECTO = 0.1;
-	public static final double ELITISMO_DEFECTO = 0.0;
+	public static final double ELITISMO_DEFECTO = 0.05;
 	public static final int FUNC_SELECCION_DEFECTO = 1;
 	public static final int FUNC_CRUCE_DEFECTO = 1;
 	public static final int FUNC_MUTACION_DEFECTO = 1;
@@ -96,15 +96,6 @@ public class Parametros
 	public void setElitismo(double elitismo) { this.elitismo = elitismo; }
 	public byte[][] getFijos() { return this.fijos; }
 	public void setFijos(byte[][] fijos) { this.fijos = fijos; }
-	public int getSeleccion() {return this.funcSeleccion; }
-	public void setSeleccion(int funcSeleccion) {
-		if (estaContenido(funcSeleccion)){
-			this.funcSeleccion = funcSeleccion;
-		} else {
-			this.funcSeleccion = FUNC_SELECCION_DEFECTO;
-		}
-	}
-
 	public int getFuncSeleccion() {
 		return funcSeleccion;
 	}

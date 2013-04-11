@@ -60,6 +60,8 @@ public class Cromosoma
 	private int aptitud;
 	private int puntuacionAcumulada;
 	
+	private static int funcAptitud;
+	
 	/* Constructoras */
 	public Cromosoma(byte[][] fijos){
 		genes = new Gen[9];
@@ -85,8 +87,7 @@ public class Cromosoma
 	public int getAptitud() {return aptitud;}
 	public void setAptitud(int aptitud) {this.aptitud = aptitud;}
 	public int getPuntuacionAcumulada() {return puntuacionAcumulada;}
-	public void setPuntuacionAcumulada(int puntuacionAcumulada) {this.puntuacionAcumulada = puntuacionAcumulada;}	
-	
+	public void setPuntuacionAcumulada(int puntuacionAcumulada) {this.puntuacionAcumulada = puntuacionAcumulada;}
 	
 	/* Metodos implementados */
 	
@@ -113,6 +114,10 @@ public class Cromosoma
 		return genes;
 	}
 	
+	public static void setFuncAptitud(int funcAptitud){
+		Cromosoma.funcAptitud = funcAptitud;
+	}
+	
 	@Override
 	public Cromosoma clone(){
 		return new Cromosoma(genes.clone(),fenotipo,aptitud,puntuacionAcumulada);
@@ -136,19 +141,21 @@ public class Cromosoma
 	private void calcularAptitud()
 	{	
 		int aux=0;
-		//TODO: el parametro de como calcular la aptitud tiene que llegar hasta aqui
-		switch(2) {
+		switch(funcAptitud) {
 			case 1:
-				aux=calcularAptitudConSumaProducto();
-				this.aptitud = 1000 - aux;
-			break;
-			case 2:
 				aux=calcularAptitudConRepetidos();
 				this.aptitud = 81*2 - aux; 
 			break;
+			case 2:
+				aux=calcularAptitudConSumatorio();
+				this.aptitud = 1000 - aux;
+			break;
+			case 3:
+				aux=calcularAptitudConFactorial();
+				this.aptitud = 10000000 - aux;
+			break;
 		}				
 		this.aptitud = aux; 
-		System.out.println(aux);
 	}
 	
 	private int calcularAptitudConRepetidos()
@@ -176,17 +183,24 @@ public class Cromosoma
 		return repetidos;
 	}
 	
-	private int calcularAptitudConSumaProducto()
+	private int calcularAptitudConSumatorio()
 	{
 		int penalizacionSuma = 0;
-		int penalizacionProd = 0;
 		for (int i=0; i<9; i++){
 			int suma = sumarFila(fenotipo[i]);
-			int prod = multiplicarFila(fenotipo[i]);
 			penalizacionSuma += Math.abs(suma - 45);
+		}
+		return penalizacionSuma;
+	}
+	
+	private int calcularAptitudConFactorial()
+	{
+		int penalizacionProd = 0;
+		for (int i=0; i<9; i++){
+			int prod = multiplicarFila(fenotipo[i]);
 			penalizacionProd += Math.abs(prod - 91);
 		}
-		return penalizacionProd + penalizacionSuma;
+		return penalizacionProd;
 	}
 	
 	private int sumarFila(byte[] fila)
