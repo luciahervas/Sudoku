@@ -22,19 +22,8 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 	
 	//-------------------CONSTRUCTORAS---------------------//
 	
-	/*
 	public SudokuCanvas (){
-		//tablero = new byte[9][9]; 
-		tablero=GeneradorSudokus.enunciadoSudoku();
-		//generar(tablero);
-		
-	}
-	*/
-	public SudokuCanvas (byte[][] tablero){
-		if (tablero==null)
-			this.tablero=new byte[9][9];
-		else
-			this.tablero = tablero;
+		this.tablero=new byte[9][9];
 		fijos = new boolean[9][9];
 		for (int i=0; i<9; i++)
 			for (int j=0; j<9; j++)

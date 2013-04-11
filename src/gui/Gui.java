@@ -65,7 +65,7 @@ public class Gui extends JFrame
 	{
 		super();
 		c=controlador;
-		this.tableroJuego = new SudokuCanvas(controlador.getTablero());
+		this.tableroJuego = new SudokuCanvas();
 		crearInterfaz();
 	}
 	
@@ -304,7 +304,8 @@ public class Gui extends JFrame
 		menu.add(menuArchivo);
 	}
 
-	public void pintaEsto(Cromosoma cromosoma, byte[][] fijos) {
+	public void pintaEsto(Cromosoma cromosoma) {
+		byte[][] fijos = this.getParametros().getFijos(); 
 		byte[][] tablero = cromosoma.getFenotipo();
 		boolean[][] bofijos = new boolean[9][9];
 		for (int i=0; i<9; i++)

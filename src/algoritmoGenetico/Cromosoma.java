@@ -29,16 +29,20 @@ public class Cromosoma
 		 * 
 		 * @param numeros fijos: no seran erroneos
 		 */
-		public Gen(byte[] fijos)
+		public Gen(byte[] f)
 		{
-			this.fijos = fijos;
+			this.fijos = f;
+			byte[] tmp = f.clone();
 			cuadricula = new byte[9];
+			byte aleatorio; 
 			for(int i=0; i<9; i++){
-				if (fijos[i]==0){
-					cuadricula[i]=(byte)Operaciones.aleatorioEntreExcepto(1,9,fijos);
+				if (tmp[i]==0){
+					aleatorio = (byte) Operaciones.aleatorioEntreExcepto(1,9,tmp);
+					tmp[i] = aleatorio;
+					cuadricula[i] = aleatorio;
 				}
 				else
-					cuadricula[i]=fijos[i];
+					cuadricula[i]=tmp[i];
 			}
 		}
 		
@@ -51,8 +55,8 @@ public class Cromosoma
 			return new Gen(cuadricula.clone(),fijos.clone());
 		}
 	}
-	// ----------------------
 	
+	// ----------------------
 	
 	/* Atributos */
 	private Gen[] genes;

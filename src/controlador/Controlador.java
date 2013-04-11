@@ -1,33 +1,50 @@
 package controlador;
 
-import gui.GeneradorSudokus;
 import gui.Gui;
+import gui.VentanaEmergente;
 import algoritmoGenetico.AlgoritmoGenetico;
+import algoritmoGenetico.Cromosoma;
 
 public class Controlador 
 {
 	private AlgoritmoGenetico genetico;
 	private Gui gui;
-	private Parametros parametros;
+	private VentanaEmergente ventanaEmergente;
 	
 	public Controlador()
 	{
-		parametros = new Parametros();
 		genetico = new AlgoritmoGenetico();
 		gui = new Gui(this);
+		ventanaEmergente = new VentanaEmergente();
 	}
 	
 	public void ejecutar()
 	{
-		genetico.algoritmo_genetico(gui.getParametros());
-		gui.pintaEsto(genetico.getGokus()[parametros.getNumGeneraciones()-1],gui.getParametros().getFijos());
+		Parametros p=gui.getParametros();
+		genetico.algoritmo_genetico(p);
+		
+		Cromosoma[] gokus = genetico.getGokus();
+		Cromosoma[] mejores = genetico.getMejoresCromosomas();
+		
+		double[] aptitudesGokus = obtenerAptitudes(gokus);
+		double[] aptitudesMejores = obtenerAptitudes(mejores);
+		double[] aptitudesMedias = genetico.getMedias();
+		
+		gui.pintaEsto(gokus[gokus.length - 1]);
+		ventanaEmergente.pinta(aptitudesGokus, aptitudesMejores, aptitudesMedias);
 	}
 	
-	public byte[][] getTablero(){ return parametros.getFijos(); }
+	private double[] obtenerAptitudes(Cromosoma[] array)
+	{
+		double[] a = new double[array.length];
+		for (int i = 0; i<array.length; i++){
+			a[i] = array[i].getAptitud();
+		}
+		return a;
+	}
 	
 	public static void main(String[] args)
 	{
-		Controlador c = new Controlador();
-		
+		Controlador c = new Controlador();		
 	}
 }

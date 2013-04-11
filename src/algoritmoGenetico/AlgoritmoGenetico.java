@@ -47,26 +47,48 @@ public class AlgoritmoGenetico
 		
 		// bucle de evolucion
 		for (int i = 0; i < parametros.getNumGeneraciones(); i++) {
-		// 0) cogemos a la elite
+			// 0) cogemos a la elite
 			elite = separaMejores(pob,porcElite);
 			
-		// 1) seleccion
-			if (parametros.getFuncSeleccion() == 0)
-				pob = seleccionTorneo(pob, parametros);
+			// 1) seleccion
+			switch(parametros.getFuncSeleccion()){
+				case 0: 
+					pob = seleccionTorneo(pob, parametros); 
+					break;
+				case 1:
+					pob = seleccionRuleta(pob, parametros);
+					break;
+				default:
+			}	
 			
-			if (parametros.getFuncSeleccion() == 1)
-				pob = seleccionRuleta(pob, parametros);
+			// 2) reproduccion
+			switch(parametros.getFuncCruce()) {
+				case 0:
+					pob = reproduccion(pob, parametros); 
+					break;
+				case 1:
+					// TODO
+					pob = reproduccion(pob, parametros);
+					break;
+				default:
+			}	
 			
-		// 2) reproduccion
-			pob = reproduccion(pob, parametros);
+			// 3) mutacion
+			switch(parametros.getFuncCruce()) {
+				case 0:
+					pob = mutacion(pob, parametros); 
+					break;
+				case 1:
+					// TODO
+					pob = mutacion(pob, parametros);
+					break;
+				default:
+			}
 			
-		// 3) mutacion
-			pob = mutacion(pob, parametros);
-			
-		// 4) volvemos a integrar a la elite			
+			// 4) volvemos a integrar a la elite			
 			incluye(elite,pob);
 			
-		// 5) tratar la nueva solucion
+			// 5) tratar la nueva solucion
 			pos_mejor = evaluarPoblacion(pob);
 			
 			if(i == 0){
@@ -78,7 +100,7 @@ public class AlgoritmoGenetico
 				}
 			}
 			
-		// 6) guardar los resultados
+			// 6) guardar los resultados
 			mejoresCromosomas[i]=pob[pos_mejor].clone();
 			gokus[i]=mejor.clone();
 			medias[i]=calcularMedia(pob);

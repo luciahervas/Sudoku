@@ -21,6 +21,9 @@ public class Parametros
 {
 	/* Algoritmos de seleccion disponibles */
 	private int[] valoresSeleccion = {0,1};
+	private int[] valoresCruce = {0,1};
+	private int[] valoresMutacion = {0,1};
+	private int[] valoresAptitud = {0,1};
 	
 	/* Valores por defecto */
 	public static final int TAM_POBLACION_DEFECTO = 100;
@@ -28,10 +31,7 @@ public class Parametros
 	public static final double PROB_CRUCE_DEFECTO = 0.7;
 	public static final double PROB_MUTACION_DEFECTO = 0.1;
 	public static final double ELITISMO_DEFECTO = 0.05;
-	public static final int FUNC_SELECCION_DEFECTO = 1;
-	public static final int FUNC_CRUCE_DEFECTO = 1;
-	public static final int FUNC_MUTACION_DEFECTO = 1;
-	public static final int FUNC_APTITUD_DEFECTO = 1;
+	public static final int FUNC_DEFECTO = 1;
 	
 	/* Atributos */
 	private int tamPoblacion;
@@ -51,12 +51,14 @@ public class Parametros
 	 * @param generaciones
 	 * @param cruce
 	 * @param mutacion
-	 * @param tolerancia
 	 * @param elitismo
-	 * @param funcion
-	 * @param seleccion: 0 para torneo y 1 para ruleta. Cualquier otro valor se tomara un 1.
+	 * @param funcionSeleccion
+	 * @param funcionCruce
+	 * @param funcionMutacion
+	 * @param funcionAptitud
 	 */
-	public Parametros (int tam, int generaciones, double cruce, double mutacion, double elitismo, int funcSeleccion)
+	public Parametros (	int tam, int generaciones, double cruce, double mutacion, double elitismo,
+						int funcSeleccion, int funcCruce, int funcMutacion, int funcAptitud )
 	{
 		this.tamPoblacion = tam;
 		this.numGeneraciones = generaciones;
@@ -66,8 +68,24 @@ public class Parametros
 		if (estaContenido(funcSeleccion)) {
 			this.funcSeleccion = funcSeleccion;
 		} else {
-			this.funcSeleccion = FUNC_SELECCION_DEFECTO;
+			this.funcSeleccion = FUNC_DEFECTO;
 		}
+		if (estaContenido(funcCruce)) {
+			this.funcCruce = funcCruce;
+		} else {
+			this.funcCruce = FUNC_DEFECTO;
+		}
+		if (estaContenido(funcMutacion)) {
+			this.funcMutacion = funcMutacion;
+		} else {
+			this.funcMutacion = FUNC_DEFECTO;
+		}
+		if (estaContenido(funcAptitud)) {
+			this.funcAptitud = funcAptitud;
+		} else {
+			this.funcAptitud = FUNC_DEFECTO;
+		}
+		this.fijos = new byte[0][0];
 	}
 	
 	public Parametros ()
@@ -77,10 +95,11 @@ public class Parametros
 		this.probCruce = PROB_CRUCE_DEFECTO;
 		this.probMutacion = PROB_MUTACION_DEFECTO;
 		this.elitismo = ELITISMO_DEFECTO;
-		this.funcSeleccion = FUNC_SELECCION_DEFECTO;
-		this.funcCruce = FUNC_CRUCE_DEFECTO;
-		this.funcMutacion = FUNC_MUTACION_DEFECTO;
-		this.funcAptitud = FUNC_APTITUD_DEFECTO;
+		this.funcSeleccion = FUNC_DEFECTO;
+		this.funcCruce = FUNC_DEFECTO;
+		this.funcMutacion = FUNC_DEFECTO;
+		this.funcAptitud = FUNC_DEFECTO;
+		this.fijos = new byte[9][9];
 	}
 	
 	/* Getters & Setters */
@@ -96,37 +115,14 @@ public class Parametros
 	public void setElitismo(double elitismo) { this.elitismo = elitismo; }
 	public byte[][] getFijos() { return this.fijos; }
 	public void setFijos(byte[][] fijos) { this.fijos = fijos; }
-	public int getFuncSeleccion() {
-		return funcSeleccion;
-	}
-
-	public void setFuncSeleccion(int funcSeleccion) {
-		this.funcSeleccion = funcSeleccion;
-	}
-
-	public int getFuncCruce() {
-		return funcCruce;
-	}
-
-	public void setFuncCruce(int funcCruce) {
-		this.funcCruce = funcCruce;
-	}
-
-	public int getFuncMutacion() {
-		return funcMutacion;
-	}
-
-	public void setFuncMutacion(int funcMutacion) {
-		this.funcMutacion = funcMutacion;
-	}
-
-	public int getFuncAptitud() {
-		return funcAptitud;
-	}
-
-	public void setFuncAptitud(int funcAptitud) {
-		this.funcAptitud = funcAptitud;
-	}
+	public int getFuncSeleccion() {return funcSeleccion;}
+	public void setFuncSeleccion(int funcSeleccion) {this.funcSeleccion = funcSeleccion;}
+	public int getFuncCruce() {return funcCruce;}
+	public void setFuncCruce(int funcCruce) {this.funcCruce = funcCruce;}
+	public int getFuncMutacion() {return funcMutacion;}
+	public void setFuncMutacion(int funcMutacion) {this.funcMutacion = funcMutacion;}
+	public int getFuncAptitud() {return funcAptitud;}
+	public void setFuncAptitud(int funcAptitud) {this.funcAptitud = funcAptitud;}
 	
 	/* Funciones auxiliares */
 	private boolean estaContenido(int v)
