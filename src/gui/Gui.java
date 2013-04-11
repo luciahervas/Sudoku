@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 
 import algoritmoGenetico.Cromosoma;
-
 import controlador.Controlador;
 import controlador.Parametros;
 
@@ -43,10 +43,10 @@ public class Gui extends JFrame
 	private JTextField formCruce;
 	private JTextField formMutacion;
 	private JTextField formElitismo;
-	private JComboBox<String> formFuncionSeleccion;
-	private JComboBox<String> formFuncionAptitud;
-	private JComboBox<String> formFuncionCruce;
-	private JComboBox<String> formFuncionMutacion;
+	private JComboBox formFuncionSeleccion;
+	private JComboBox formFuncionAptitud;
+	private JComboBox formFuncionCruce;
+	private JComboBox formFuncionMutacion;
 	/**/
 	
 	private JMenuBar menu;
@@ -123,165 +123,115 @@ public class Gui extends JFrame
 		return ;
 	}
 	
+	/**
+	 * Crea un panel para el formulario con un label y el formulario
+	 * 
+	 * @param nombre que se muestra en el label
+	 * @param formulario : atributo de clase
+	 * @param (boolean) false para los formularios, true si from es NULL
+	 * @return panel creado
+	 */
+	private JPanel crearPanelInterno(String nombre, Component form, boolean esAviso)
+	{
+		JPanel p = new JPanel();
+		JLabel l = new JLabel(nombre);
+		if(!esAviso){
+			p.setLayout(new GridLayout(1,0,0,0)); 	
+			p.add(l);
+			p.add(form);
+		} else {
+			// panel de aviso
+			p.setLayout(new GridLayout(1,2,0,0));
+			l.setForeground(Color.RED);
+			l.setFont(new Font("Lucida Grande", Font.BOLD, 11));
+			l.setVisible(false);
+			p.add(l);
+		}
+		return p;
+	}
+	
+	/**
+	 * Crea el panel derecho - el formulario para los parametros de entrada
+	 * 
+	 * @return panel
+	 */
 	private JPanel obtenerFormulario()
 	{
 		panelFormulario = new JPanel();
-		
 		panelFormulario.setLayout(new GridLayout(14, 1, 0, 0));
 
 		// 1) panelPoblacion
-			JPanel panelPoblacion = new JPanel();
-			panelPoblacion.setLayout(new GridLayout(1,0,0,0)); 
-			JLabel labelPoblacion = new JLabel("  Poblacion: ");
-			panelPoblacion.add(labelPoblacion);
-			//panelPoblacion.add(new JPanel()); // hueco intermedio
-			formPoblacion = new JTextField(String.valueOf(Parametros.TAM_POBLACION_DEFECTO));
-			panelPoblacion.add(formPoblacion);
-		panelFormulario.add(panelPoblacion);
-
+		formPoblacion = new JTextField(String.valueOf(Parametros.TAM_POBLACION_DEFECTO));
+		JPanel p1 = crearPanelInterno("Poblacion: ", formPoblacion, false);
+		panelFormulario.add(p1);
+		
 		// 2) panelPoblacionInvalido
-			JPanel panelPoblacionInvalido = new JPanel();
-			panelPoblacionInvalido.setLayout(new GridLayout(1,2,0,0));
-			//panelPoblacionInvalido.add(new JPanel()); //hueco intermedio
-			JLabel labelPoblacionInvalido = new JLabel("Par‡metro poblaci—n incorrecto");
-			labelPoblacionInvalido.setForeground(Color.RED);
-			labelPoblacionInvalido.setFont(new Font("Lucida Grande", Font.BOLD, 11));
-			labelPoblacionInvalido.setVisible(false);
-			panelPoblacionInvalido.add(labelPoblacionInvalido);
-		panelFormulario.add(panelPoblacionInvalido);
-
+		JPanel p2 = crearPanelInterno("Parametro poblacion incorrecto", null, true);
+		panelFormulario.add(p2);
 
 		// 3) panelGeneraciones
-			JPanel panelGeneraciones = new JPanel();
-			panelGeneraciones.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelGeneraciones = new JLabel("  Generaciones: ");
-			panelGeneraciones.add(labelGeneraciones);
-			//panelGeneraciones.add(new JPanel()); // hueco intermedio
-			formGeneraciones = new JTextField(String.valueOf(Parametros.NUM_GENERACIONES_DEFECTO));
-			panelGeneraciones.add(formGeneraciones);
-		panelFormulario.add(panelGeneraciones);
+		formGeneraciones = new JTextField(String.valueOf(Parametros.NUM_GENERACIONES_DEFECTO));
+		JPanel p3 = crearPanelInterno("Generaciones: ", formGeneraciones, false);
+		panelFormulario.add(p3);
 
 		// 4) panelGeneracionesInvalido
-			JPanel panelGeneracionesInvalido = new JPanel();
-			panelGeneracionesInvalido.setLayout(new GridLayout(1,2,0,0));
-			//panelGeneracionesInvalido.add(new JPanel()); // hueco intermedio
-			JLabel labelgeneracionesInvalido = new JLabel("Par‡metro generaciones inv‡lido");
-			labelgeneracionesInvalido.setForeground(Color.RED);
-			labelgeneracionesInvalido.setFont(new Font("Lucida Grande", Font.BOLD, 11));
-			labelgeneracionesInvalido.setVisible(false);
-			panelGeneracionesInvalido.add(labelgeneracionesInvalido);
-		panelFormulario.add(panelGeneracionesInvalido);
+		JPanel p4 = crearPanelInterno("Parametro generaciones invalido", null, true);
+		panelFormulario.add(p4);
 
 		// 5) panelCruce
-			JPanel panelCruce = new JPanel();
-			panelCruce.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelCruce = new JLabel("  Prob. Cruce: ");
-			panelCruce.add(labelCruce);
-			//panelCruce.add(new JPanel()); // hueco intermedio
-			formCruce = new JTextField(String.valueOf(Parametros.PROB_CRUCE_DEFECTO));
-			panelCruce.add(formCruce);
-		panelFormulario.add(panelCruce);
+		formCruce = new JTextField(String.valueOf(Parametros.PROB_CRUCE_DEFECTO));
+		JPanel p5 = crearPanelInterno("Prob. de cruce", formCruce, false);
+		panelFormulario.add(p5);
 
 		// 6) panelCruceInvalido
-			JPanel panelCruceInvalido = new JPanel();
-			panelCruceInvalido.setLayout(new GridLayout(1,2,0,0));
-			//panelCruceInvalido.add(new JPanel()); // hueco intermedio
-			JLabel labelCruceInvalido = new JLabel("Parametro Cruce invalido");
-			labelCruceInvalido.setForeground(Color.RED);
-			labelCruceInvalido.setFont(new Font("Lucida Grande", Font.BOLD, 11));
-			labelCruceInvalido.setVisible(false);
-			panelCruceInvalido.add(labelCruceInvalido);
-		panelFormulario.add(panelCruceInvalido);
+		JPanel p6 = crearPanelInterno("Parametro p. cruce invalido", null, true);
+		panelFormulario.add(p6);
 
 		// 7) panelMutacion
-			JPanel panelMutacion = new JPanel();
-			panelMutacion.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelMutacion = new JLabel("  Prob. Mutacion: ");
-			panelMutacion.add(labelMutacion);
-			//panelMutacion.add(new JPanel()); // hueco intermedio
-			formMutacion = new JTextField(String.valueOf(Parametros.PROB_MUTACION_DEFECTO));
-			panelMutacion.add(formMutacion);
-		panelFormulario.add(panelMutacion);
+		formMutacion = new JTextField(String.valueOf(Parametros.PROB_MUTACION_DEFECTO));
+		JPanel p7 = crearPanelInterno("Prob. de mutacion", formMutacion, false);
+		panelFormulario.add(p7);
 
 		// 8) panelMutacionesInvalido
-			JPanel panelMutacionesInvalido = new JPanel();
-			panelMutacionesInvalido.setLayout(new GridLayout(1,2,0,0));
-			//panelMutacionesInvalido.add(new JPanel()); // hueco intermedio
-			JLabel labelMutacionesInvalido = new JLabel("Parametro mutaciones invalido");
-			labelMutacionesInvalido.setForeground(Color.RED);
-			labelMutacionesInvalido.setFont(new Font("Lucida Grande", Font.BOLD, 11));
-			labelMutacionesInvalido.setVisible(false);
-			panelMutacionesInvalido.add(labelMutacionesInvalido);
-		panelFormulario.add(panelMutacionesInvalido);
+		JPanel p8 = crearPanelInterno("Parametro mutaciones invalido", null, true);
+		panelFormulario.add(p8);
 
 		// 9) panelElitismo
-			JPanel panelElitismo = new JPanel();
-			panelElitismo.setLayout(new GridLayout(1,0,0,0));
-			JLabel labelElitismo = new JLabel("  Porc. Elitismo: ");
-			panelElitismo.add(labelElitismo);
-			//panelElitismo.add(new JPanel()); // hueco intermedio
-			formElitismo = new JTextField(String.valueOf(Parametros.ELITISMO_DEFECTO)); 
-			panelElitismo.add(formElitismo);
-		panelFormulario.add(panelElitismo);
+		formElitismo = new JTextField(String.valueOf(Parametros.ELITISMO_DEFECTO)); 
+		JPanel p9 = crearPanelInterno("Proporcion de elitismo", formElitismo, false);
+		panelFormulario.add(p9);
 
 		// 10) panelElitismoInvalido
-			JPanel  panelElitismoInvalido = new JPanel();
-			panelElitismoInvalido.setLayout(new GridLayout(1,0,0,0));
-			//panelElitismoInvalido.add(new JPanel()); // hueco intermedio
-			JLabel labelElitismoInvalido = new JLabel("Parametro Elitismo invalido");
-			labelElitismoInvalido.setForeground(Color.RED);
-			labelElitismoInvalido.setFont(new Font("Lucida Grande", Font.BOLD, 11));
-			labelElitismoInvalido.setVisible(false);
-			panelElitismoInvalido.add(labelElitismoInvalido);
-		panelFormulario.add(panelElitismoInvalido);
+		JPanel p10 = crearPanelInterno("Parametro Elitismo invalido", null, true);
+		panelFormulario.add(p10);
 
 		// 11) panelSeleccion
-			JPanel panelSeleccion = new JPanel();
-			panelSeleccion.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelSeleccion = new JLabel("  F. Seleccion: ");
-			panelSeleccion.add(labelSeleccion);
-			//panelSeleccion.add(new JPanel()); // hueco intermedio
-			formFuncionSeleccion = new JComboBox<String>();
-			formFuncionSeleccion.setModel(new DefaultComboBoxModel<String>(new String[] {"Torneo", "Ruleta"}));
-			formFuncionSeleccion.setSelectedIndex(1);
-			panelSeleccion.add(formFuncionSeleccion);
-		panelFormulario.add(panelSeleccion);
+		formFuncionSeleccion = new JComboBox();
+		formFuncionSeleccion.setModel(new DefaultComboBoxModel(new String[] {"Torneo", "Ruleta"}));
+		formFuncionSeleccion.setSelectedIndex(1);
+		JPanel p11 = crearPanelInterno("Funcion de seleccion", formFuncionSeleccion, false);
+		panelFormulario.add(p11);
 
 		// 12) panelAptitud
-			JPanel panelAptitud = new JPanel();
-			panelAptitud.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelAptitud = new JLabel("  F. Aptitud: ");
-			panelAptitud.add(labelAptitud);
-			//panelAptitud.add(new JPanel()); // hueco intermedio
-			formFuncionAptitud = new JComboBox<String>();
-			formFuncionAptitud.setModel(new DefaultComboBoxModel<String>(new String[] {"Repetidos","Sumatorio", "Factorial"}));
-			formFuncionAptitud.setSelectedIndex(1);
-			panelAptitud.add(formFuncionAptitud);
-		panelFormulario.add(panelAptitud);
+		formFuncionAptitud = new JComboBox();
+		formFuncionAptitud.setModel(new DefaultComboBoxModel(new String[] {"Repetidos","Sumatorio", "Factorial"}));
+		formFuncionAptitud.setSelectedIndex(1);
+		JPanel p12 = crearPanelInterno("Funcion de aptitud", formFuncionAptitud, false);
+		panelFormulario.add(p12);
 		
 		// 13) panelFuncionCruce
-			JPanel panelFuncionCruce = new JPanel();
-			panelFuncionCruce.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelFuncionCruce = new JLabel("  F. Cruce: ");
-			panelFuncionCruce.add(labelFuncionCruce);
-			//panelAptitud.add(new JPanel()); // hueco intermedio
-			formFuncionCruce = new JComboBox<String>();
-			formFuncionCruce.setModel(new DefaultComboBoxModel<String>(new String[] {"Cruce 1", "Cruce 2"}));
-			formFuncionCruce.setSelectedIndex(1);
-			panelFuncionCruce.add(formFuncionCruce);
-		panelFormulario.add(panelFuncionCruce);
+		formFuncionCruce = new JComboBox();
+		formFuncionCruce.setModel(new DefaultComboBoxModel(new String[] {"Cruce 1", "Cruce 2"}));
+		formFuncionCruce.setSelectedIndex(1);
+		JPanel p13 = crearPanelInterno("Funcion de cruce", formFuncionCruce, false);
+		panelFormulario.add(p13);
 		
 		// 14) panelFuncionMutacion
-			JPanel panelFuncionMutacion = new JPanel();
-			panelFuncionMutacion.setLayout(new GridLayout(1, 0, 0, 0));
-			JLabel labelFuncionMutacion = new JLabel("  F. Mutacion: ");
-			panelFuncionMutacion.add(labelFuncionMutacion);
-			//panelAptitud.add(new JPanel()); // hueco intermedio
-			formFuncionMutacion = new JComboBox<String>();
-			formFuncionMutacion.setModel(new DefaultComboBoxModel<String>(new String[] {"Mutacion 1", "Mutacion 2"}));
-			formFuncionMutacion.setSelectedIndex(1);
-			panelFuncionMutacion.add(formFuncionMutacion);
-		panelFormulario.add(panelFuncionMutacion);
+		formFuncionMutacion = new JComboBox();
+		formFuncionMutacion.setModel(new DefaultComboBoxModel(new String[] {"Mutacion 1", "Mutacion 2"}));
+		formFuncionMutacion.setSelectedIndex(1);
+		JPanel p14 = crearPanelInterno("Funcion de mutacion", formFuncionMutacion, false);
+		panelFormulario.add(p14);
 		
 		return panelFormulario;
 	}
