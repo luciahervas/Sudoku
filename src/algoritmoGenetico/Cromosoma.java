@@ -1,81 +1,25 @@
 package algoritmoGenetico;
 
-/**
-* Clase que describe a un cromosoma
-* formador por 9 genes (9 cuadriculas)
-*
-*/
-public class Cromosoma 
+public class Cromosoma
 {
-	/**
-	 * Clase que codifica una cuadricula
-	 * 
-	 * --------------
-	 * | 4 | 5 | 8 |
-	 * --------------
-	 * | 3 | 1 | 9 |
-	 * -------------
-	 * | 2 | 7 | 6 |
-	 * -------------
-	 */
-	private class Gen
-	{
-		private byte[] cuadricula;
-		private byte[] fijos;
-		
-		/**
-		 * Genera una cuadricula aleatoria donde no
-		 * habra numeros repetidos
-		 * 
-		 * @param numeros fijos: no seran erroneos
-		 */
-		public Gen(byte[] f)
-		{
-			this.fijos = f;
-			byte[] tmp = f.clone();
-			cuadricula = new byte[9];
-			byte aleatorio; 
-			for(int i=0; i<9; i++){
-				if (tmp[i]==0){
-					aleatorio = (byte) Operaciones.aleatorioEntreExcepto(1,9,tmp);
-					tmp[i] = aleatorio;
-					cuadricula[i] = aleatorio;
-				}
-				else
-					cuadricula[i]=tmp[i];
-			}
-		}
-		
-		public Gen(byte[] cuadricula,byte[] fijos){
-			this.cuadricula = cuadricula;
-			this.fijos = fijos;
-		}
-		
-		public Gen clone(){
-			return new Gen(cuadricula.clone(),fijos.clone());
-		}
-	}
-	
-	// ----------------------
-	
 	/* Atributos */
 	private Gen[] genes;
-	private byte[][] fenotipo;
+	private int[][] fenotipo;
 	private int aptitud;
 	private int puntuacionAcumulada;
 	
 	private static int funcAptitud;
 	
 	/* Constructoras */
-	public Cromosoma(byte[][] fijos){
+	public Cromosoma(int[][] fijos){
 		genes = new Gen[9];
 		for (int i=0; i<9; i++){
 			genes[i]=new Gen(fijos[i]);
 		}
-		fenotipo = new byte[9][9];
+		fenotipo = new int[9][9];
 		evaluarCromosoma(); //Calcula fenotipo y aptitud
 	}
-	public Cromosoma(Gen[] genes, byte[][] fenotipo, int aptitud, int puntuacionAcumulada)
+	public Cromosoma(Gen[] genes, int[][] fenotipo, int aptitud, int puntuacionAcumulada)
 	{
 		this.genes = genes;
 		this.fenotipo = fenotipo;
@@ -86,8 +30,8 @@ public class Cromosoma
 	/* Getters & Setters */
 	public Gen[] getGenes() {return genes;}
 	public void setGenes(Gen[] genes) {this.genes = genes;}
-	public byte[][] getFenotipo() {return fenotipo;}
-	public void setFenotipo(byte[][] fenotipo) {this.fenotipo = fenotipo;}
+	public int[][] getFenotipo() {return fenotipo;}
+	public void setFenotipo(int[][] fenotipo) {this.fenotipo = fenotipo;}
 	public int getAptitud() {return aptitud;}
 	public void setAptitud(int aptitud) {this.aptitud = aptitud;}
 	public int getPuntuacionAcumulada() {return puntuacionAcumulada;}
@@ -137,7 +81,7 @@ public class Cromosoma
 	{
 		for(int i=0; i<9; i++){
 			for(int j=0; j<9; j++){
-				this.fenotipo[i][j] = this.genes[i].cuadricula[j];
+				this.fenotipo[i][j] = this.genes[i].getCuadricula()[j];
 			}
 		}
 	}
@@ -207,7 +151,7 @@ public class Cromosoma
 		return penalizacionProd;
 	}
 	
-	private int sumarFila(byte[] fila)
+	private int sumarFila(int[] fila)
 	{
 		int acc = 0;
 		for(int i=0; i<fila.length; i++){
@@ -216,7 +160,7 @@ public class Cromosoma
 		return acc;
 	}
 	
-	private int multiplicarFila(byte[] fila)
+	private int multiplicarFila(int[] fila)
 	{
 		int acc = 1;
 		for(int i=0; i<fila.length; i++){
@@ -231,11 +175,11 @@ public class Cromosoma
 	 * @param j e [0,8]
 	 */
 	public void mutaGen(int j) {
-		int a = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].fijos);
-		int b = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].fijos);
-		byte aux = this.genes[j].cuadricula[a];
-		this.genes[j].cuadricula[a] = this.genes[j].cuadricula[b];
-		this.genes[j].cuadricula[b] = aux;
+		int a = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].getFijos());
+		int b = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].getFijos());
+		int aux = this.genes[j].getCuadricula()[a];
+		this.genes[j].getCuadricula()[a] = this.genes[j].getCuadricula()[b];
+		this.genes[j].getCuadricula()[b] = aux;
 	}
 	
 	public void setGen(int i, Gen gen) {

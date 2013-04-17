@@ -14,7 +14,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 
 	private static final long serialVersionUID = 1L;
 	//--------------------ATRIBUTOS---------------------//
-	public byte[][] tablero;
+	public int[][] tablero;
 	public boolean[][] fijos;
 	int[] pulsado;
 	private static final int M = 35;
@@ -23,7 +23,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 	//-------------------CONSTRUCTORAS---------------------//
 	
 	public SudokuCanvas (){
-		this.tablero=new byte[9][9];
+		this.tablero=new int[9][9];
 		fijos = new boolean[9][9];
 		for (int i=0; i<9; i++)
 			for (int j=0; j<9; j++)
@@ -38,8 +38,8 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 	} 
 
 	//-------------------METODOS---------------------//
-	public byte[][] getTablero(){return this.tablero;}
-	public void setTablero(byte[][] tablero)
+	public int[][] getTablero(){return this.tablero;}
+	public void setTablero(int[][] tablero)
 	{
 		this.tablero = tablero;
 	}
@@ -82,7 +82,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 	private void pintarNumeritos(int a, int b, Graphics g, int cuadrado) {
 		int xOrigen = a * M + 10;
 		int yOrigen = b * M + 26;
-		byte n;
+		int n;
 		String s;
 		for (int i=0; i<3; i++){
 			g.setColor(Color.WHITE);
@@ -168,7 +168,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		return coord;
 	}
 	
-	public void cambiarTablero(byte[][] tableroNuevo, boolean[][] bofijos){
+	public void cambiarTablero(int[][] tableroNuevo, boolean[][] bofijos){
 		fijos=bofijos;
 		tablero=tableroNuevo;
 		this.repaint();
@@ -224,7 +224,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		if (pulsado!=null){
 			String n = KeyEvent.getKeyText( e.getKeyCode() );
 			if (isNumeric(n)) {
-				tablero[pulsado[0]][pulsado[1]]=Byte.valueOf(n);
+				tablero[pulsado[0]][pulsado[1]]=Integer.valueOf(n);
 				pulsado=null;
 				this.repaint();
 			}

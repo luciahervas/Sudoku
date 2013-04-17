@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,6 +37,7 @@ public class Gui extends JFrame
 	private JSplitPane panelPrincipal;
 	private JPanel panelFormulario;
 	private JPanel panelCanvas;
+	private JButton go;
 	
 	/**/
 	private JTextField formPoblacion;
@@ -108,13 +110,11 @@ public class Gui extends JFrame
 		
 		// 1) panel izquierdo: formulario
 		panelFormulario = obtenerFormulario();
-		// obtenerDetalles(); // TODO
 		
 		// 2) panel derecho: sudoku
 		panelCanvas = obtenerPanelCanvas();
 		
 		// 3) insertar los paneles
-		//panelPrincipal.setLayout(new BorderLayout());	
 		panelPrincipal.add(panelCanvas);
 		panelPrincipal.add(panelFormulario);
 
@@ -158,7 +158,7 @@ public class Gui extends JFrame
 	private JPanel obtenerFormulario()
 	{
 		panelFormulario = new JPanel();
-		panelFormulario.setLayout(new GridLayout(14, 1, 0, 0));
+		panelFormulario.setLayout(new GridLayout(15, 1, 0, 0));
 
 		// 1) panelPoblacion
 		formPoblacion = new JTextField(String.valueOf(Parametros.TAM_POBLACION_DEFECTO));
@@ -207,31 +207,37 @@ public class Gui extends JFrame
 
 		// 11) panelSeleccion
 		formFuncionSeleccion = new JComboBox();
-		formFuncionSeleccion.setModel(new DefaultComboBoxModel(new String[] {"Torneo", "Ruleta"}));
-		formFuncionSeleccion.setSelectedIndex(1);
+		formFuncionSeleccion.setModel(new DefaultComboBoxModel(new String[] {"Torneo", "Ruleta","Universal","Ranking"}));
+		formFuncionSeleccion.setSelectedIndex(0);
 		JPanel p11 = crearPanelInterno("Funcion de seleccion", formFuncionSeleccion, false);
 		panelFormulario.add(p11);
 
 		// 12) panelAptitud
 		formFuncionAptitud = new JComboBox();
 		formFuncionAptitud.setModel(new DefaultComboBoxModel(new String[] {"Repetidos","Sumatorio", "Factorial"}));
-		formFuncionAptitud.setSelectedIndex(1);
+		formFuncionAptitud.setSelectedIndex(0);
 		JPanel p12 = crearPanelInterno("Funcion de aptitud", formFuncionAptitud, false);
 		panelFormulario.add(p12);
 		
 		// 13) panelFuncionCruce
 		formFuncionCruce = new JComboBox();
-		formFuncionCruce.setModel(new DefaultComboBoxModel(new String[] {"Cruce 1", "Cruce 2"}));
-		formFuncionCruce.setSelectedIndex(1);
+		formFuncionCruce.setModel(new DefaultComboBoxModel(new String[] {"Cruce 1", "Cruce 2","Cruce3"}));
+		formFuncionCruce.setSelectedIndex(0);
 		JPanel p13 = crearPanelInterno("Funcion de cruce", formFuncionCruce, false);
 		panelFormulario.add(p13);
 		
 		// 14) panelFuncionMutacion
 		formFuncionMutacion = new JComboBox();
 		formFuncionMutacion.setModel(new DefaultComboBoxModel(new String[] {"Mutacion 1", "Mutacion 2"}));
-		formFuncionMutacion.setSelectedIndex(1);
+		formFuncionMutacion.setSelectedIndex(0);
 		JPanel p14 = crearPanelInterno("Funcion de mutacion", formFuncionMutacion, false);
 		panelFormulario.add(p14);
+		
+		// 15) boton
+		go = new JButton("GO!");
+		JPanel p15 = new JPanel();
+		p15.add(go);
+		panelFormulario.add(p15);
 		
 		return panelFormulario;
 	}
@@ -257,7 +263,7 @@ public class Gui extends JFrame
 		itemVacio.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				byte[][] tablero = new byte[9][9];
+				int[][] tablero = new int[9][9];
 				boolean[][] fijos = new boolean[9][9];
 				fijos = new boolean[9][9];
 				for (int i=0; i<9; i++)
@@ -272,7 +278,7 @@ public class Gui extends JFrame
 		itemPredefinido.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				byte[][] tablero = GeneradorSudokus.enunciadoSudoku();
+				int[][] tablero = GeneradorSudokus.enunciadoSudoku();
 				boolean[][] fijos = new boolean[9][9];
 				fijos = new boolean[9][9];
 				for (int i=0; i<9; i++)
@@ -292,21 +298,21 @@ public class Gui extends JFrame
 			}
 		});
 		// 3
-		itemSalir = new JMenuItem("Ejecutar");
-		itemSalir.addActionListener(new ActionListener() {
+		JMenuItem itemEjecutar = new JMenuItem("Ejecutar");
+		itemEjecutar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				c.ejecutar();
 			}
 		});
-		menuArchivo.add(itemSalir);
+		menu.add(itemEjecutar);
 
 		menu.add(menuArchivo);
 	}
 
 	public void pintaEsto(Cromosoma cromosoma) {
-		byte[][] fijos = this.getParametros().getFijos(); 
-		byte[][] tablero = cromosoma.getFenotipo();
+		int[][] fijos = this.getParametros().getFijos(); 
+		int[][] tablero = cromosoma.getFenotipo();
 		boolean[][] bofijos = new boolean[9][9];
 		for (int i=0; i<9; i++)
 			for (int j=0; j<9; j++)

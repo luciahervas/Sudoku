@@ -12,7 +12,7 @@ package controlador;
  *  | double | mutacion 					| 0.05 					|
  *  | double | elitismo 					| 0.0					|
  *  | int    | seleccion					| 1 					|
- *  | byte[] | fijos
+ *  | int[] | fijos
  *  
  * Nota: llamar a la contructora vacia para asignar los valores por defecto 
  * 	
@@ -20,8 +20,8 @@ package controlador;
 public class Parametros 
 {
 	/* Algoritmos de seleccion disponibles */
-	private int[] valoresSeleccion = {0,1};
-	private int[] valoresCruce = {0,1};
+	private int[] valoresSeleccion = {0,1,2,3};
+	private int[] valoresCruce = {0,1,2};
 	private int[] valoresMutacion = {0,1};
 	private int[] valoresAptitud = {0,1};
 	
@@ -31,7 +31,7 @@ public class Parametros
 	public static final double PROB_CRUCE_DEFECTO = 0.7;
 	public static final double PROB_MUTACION_DEFECTO = 0.1;
 	public static final double ELITISMO_DEFECTO = 0.05;
-	public static final int FUNC_DEFECTO = 1;
+	public static final int FUNC_DEFECTO = 0;
 	
 	/* Atributos */
 	private int tamPoblacion;
@@ -43,7 +43,7 @@ public class Parametros
 	private int funcCruce;
 	private int funcMutacion;
 	private int funcAptitud;
-	private byte[][] fijos;
+	private int[][] fijos;
 	
 	/**
 	 * 
@@ -85,7 +85,7 @@ public class Parametros
 		} else {
 			this.funcAptitud = FUNC_DEFECTO;
 		}
-		this.fijos = new byte[0][0];
+		this.fijos = new int[0][0];
 	}
 	
 	public Parametros ()
@@ -99,7 +99,7 @@ public class Parametros
 		this.funcCruce = FUNC_DEFECTO;
 		this.funcMutacion = FUNC_DEFECTO;
 		this.funcAptitud = FUNC_DEFECTO;
-		this.fijos = new byte[9][9];
+		this.fijos = new int[9][9];
 	}
 	
 	/* Getters & Setters */
@@ -113,8 +113,8 @@ public class Parametros
 	public void setProbMutacion(double probMutacion) { this.probMutacion = probMutacion; }
 	public double getElitismo() { return this.elitismo; }
 	public void setElitismo(double elitismo) { this.elitismo = elitismo; }
-	public byte[][] getFijos() { return this.fijos; }
-	public void setFijos(byte[][] fijos) { this.fijos = fijos; }
+	public int[][] getFijos() { return this.fijos; }
+	public void setFijos(int[][] fijos) { this.fijos = fijos; }
 	public int getFuncSeleccion() {return funcSeleccion;}
 	public void setFuncSeleccion(int funcSeleccion) {this.funcSeleccion = funcSeleccion;}
 	public int getFuncCruce() {return funcCruce;}
