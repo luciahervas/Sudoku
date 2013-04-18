@@ -56,6 +56,7 @@ public class Gui extends JFrame
 	private JMenu menuNuevo;
 	private JMenuItem itemVacio;
 	private JMenuItem itemPredefinido;
+	private JMenuItem itemResuelto;
 	private JMenuItem itemSalir;
 
 	/**
@@ -303,6 +304,21 @@ public class Gui extends JFrame
 			}
 		});
 		menuNuevo.add(itemPredefinido);
+		// 1.3
+		itemResuelto = new JMenuItem("Resuelto");
+		itemResuelto.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int[][] tablero = GeneradorSudokus.enunciadoResuleto();
+				boolean[][] fijos = new boolean[9][9];
+				for (int i=0; i<9; i++)
+					for (int j=0; j<9; j++)
+							fijos[i][j]=true;
+				tableroJuego.cambiarTablero(tablero, fijos);
+			}
+		});
+		menuNuevo.add(itemResuelto);
+		// --
 		menuArchivo.add(menuNuevo);
 		// 2
 		itemSalir = new JMenuItem("Salir");
