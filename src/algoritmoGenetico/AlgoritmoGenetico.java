@@ -267,10 +267,21 @@ public class AlgoritmoGenetico
 	}
 	
 	/**
-	 * La funcion de seleccion escoge un numero de supervivientes
-	 * igual al tam de la poblacion.
+	 * Seleccionar TAM_POBLACION individuos.
 	 * 
 	 * Metodo de seleccion => Universal estocastico
+	 * 
+	 * Ejemplo
+	 * 
+	 * | A | 23 | 
+	 * | B | 26 |
+	 * | C | 27 |
+	 * 
+	 * escoger 3 individuos: 27/3 = 9 => random(0,9) = 3
+	 * 
+	 * | 3  | A |
+	 * | 12 | A |
+	 * | 21 | A |
 	 * 
 	 * @param poblacion
 	 * @param parametros del problema
@@ -278,8 +289,41 @@ public class AlgoritmoGenetico
 	 */
 	private Cromosoma[] seleccionUniversalEstocastico(Cromosoma[] pob, Parametros parametros)
 	{
-		//TODO
-		return null;
+		Cromosoma[] poblacionSeleccionada = new Cromosoma[parametros.getTamPoblacion()];
+		
+		// obtener la suma total de aptitudes de la poblacion y la puntuacion acumulada para cada individuo
+		int suma = 0;
+		for(int i=0; i<pob.length; i++){
+			suma+=pob[i].getAptitud();
+			pob[i].setPuntuacionAcumulada(suma);
+		}
+		
+		// obtener los marcadores equalitariamente y generar el primer marcador
+		int distanciaMarcadores = (int) (suma / parametros.getTamPoblacion());
+		int marcadorActual;
+		
+		if (parametros.modoDebug)
+			marcadorActual = 3;
+		else
+			marcadorActual = Operaciones.aleatorioEntre(0, distanciaMarcadores);
+		
+		// escogemos TAM_POBLACION individuos segun el metodo estocastico universal
+		int indivudoInspeccionado = 0;
+		boolean escogido = false;
+		for(int i = 0; i<parametros.getTamPoblacion(); i++){
+			escogido = false;
+			while (!escogido) {
+				if ( pob[indivudoInspeccionado].getPuntuacionAcumulada() >= marcadorActual ){
+					poblacionSeleccionada[i] = pob[indivudoInspeccionado].clone();
+					escogido = true;
+				} else {
+					indivudoInspeccionado++;
+				}
+			}
+			marcadorActual += distanciaMarcadores;
+		}
+		
+		return poblacionSeleccionada;
 	}
 
 	/**
