@@ -90,17 +90,17 @@ public class Cromosoma
 	{	
 		int aux=0;
 		switch(funcAptitud) {
-			case 1:
+			case 0:
 				aux=calcularAptitudConRepetidos();
-				this.aptitud = 81*2 - aux; 
+				this.aptitud = 72 - aux; 
+			break;
+			case 1:
+				aux=calcularAptitudConSumatorio();
+				this.aptitud = aux;
 			break;
 			case 2:
-				aux=calcularAptitudConSumatorio();
-				this.aptitud = 1000 - aux;
-			break;
-			case 3:
 				aux=calcularAptitudConFactorial();
-				this.aptitud = 10000000 - aux;
+				this.aptitud = aux;
 			break;
 		}				
 		this.aptitud = aux; 
@@ -146,7 +146,7 @@ public class Cromosoma
 		int penalizacionProd = 0;
 		for (int i=0; i<9; i++){
 			int prod = multiplicarFila(fenotipo[i]);
-			penalizacionProd += Math.abs(prod - 91);
+			penalizacionProd += Math.abs(prod - 362880);
 		}
 		return penalizacionProd;
 	}

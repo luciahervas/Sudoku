@@ -236,6 +236,12 @@ public class Gui extends JFrame
 		// 15) boton
 		go = new JButton("GO!");
 		JPanel p15 = new JPanel();
+		go.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				c.ejecutar();
+			}
+		});
 		p15.add(go);
 		panelFormulario.add(p15);
 		
@@ -297,15 +303,6 @@ public class Gui extends JFrame
 				System.exit(0);
 			}
 		});
-		// 3
-		JMenuItem itemEjecutar = new JMenuItem("Ejecutar");
-		itemEjecutar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				c.ejecutar();
-			}
-		});
-		menu.add(itemEjecutar);
 
 		menu.add(menuArchivo);
 	}

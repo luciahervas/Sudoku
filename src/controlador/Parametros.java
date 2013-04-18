@@ -9,10 +9,10 @@ package controlador;
  *  | int  	 | tam							| 100 					|
  *  | int  	 | generaciones 				| 50 					|
  *  | double | cruce 						| 0.6 					|
- *  | double | mutacion 					| 0.05 					|
- *  | double | elitismo 					| 0.0					|
+ *  | double | mutacion 					| 0.1 					|
+ *  | double | elitismo 					| 1 					|
  *  | int    | seleccion					| 1 					|
- *  | int[] | fijos
+ *  | int[]  | fijos
  *  
  * Nota: llamar a la contructora vacia para asignar los valores por defecto 
  * 	
@@ -134,5 +134,7 @@ public class Parametros
 		}
 		return false;
 	}
+	
+	public boolean modoDebug = false;
 	
 }

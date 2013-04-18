@@ -11,7 +11,6 @@ import controlador.Parametros;
  */
 public class AlgoritmoGenetico 
 {
-	private static boolean modoDebug = false;
 	private static double[] numerosAleatorios = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 	private static int numeroActual;
 	private int longitudCromosoma;
@@ -59,7 +58,7 @@ public class AlgoritmoGenetico
 		// bucle de evolucion
 		for (int i = 0; i < parametros.getNumGeneraciones(); i++) {
 			// 0) cogemos a la elite
-			//elite = separaMejores(pob,porcElite);
+			elite = separaMejores(pob,porcElite);
 			
 			// 1) seleccion
 			switch(parametros.getFuncSeleccion()){
@@ -105,13 +104,12 @@ public class AlgoritmoGenetico
 			}
 			
 			// 4) volvemos a integrar a la elite			
-			//incluye(elite,pob);
+			incluye(elite,pob);
 			
 			// 5) tratar la nueva solucion
 			pos_mejor = evaluarPoblacion(pob);
 			
-			if(i == 0){
-				// primera generacion: no esta inicializado <mejor> ni <picoAnterior>	
+			if(i == 0){	
 				mejor = pob[pos_mejor].clone();
 			} else {
 				if (pob[pos_mejor].getAptitud() > mejor.getAptitud()){
@@ -204,7 +202,7 @@ public class AlgoritmoGenetico
 		
 		double random;
 		for (int i = 0; i < parametros.getTamPoblacion(); i++) {
-			if (modoDebug){
+			if (parametros.modoDebug){
 				random = siguienteAleatorio();
 			} else {
 				random = Math.random();
@@ -239,7 +237,7 @@ public class AlgoritmoGenetico
 		int random;
 		for(int i=0; i<parametros.getTamPoblacion();i++) {
 			for(int j=0; j<tamTorneo; j++){
-				if(modoDebug){
+				if(parametros.modoDebug){
 					random = (int) (siguienteAleatorio() * 10);
 				} else {
 					random=Operaciones.aleatorioEntre(0,parametros.getTamPoblacion()-1);
@@ -304,7 +302,7 @@ public class AlgoritmoGenetico
 		
 		// 3. Se eligen los individuos a cruzar
 		for (int i=0; i<parametros.getTamPoblacion(); i++){
-			if(modoDebug){
+			if(parametros.modoDebug){
 				prob = siguienteAleatorio();
 			} else {
 				prob=Math.random();
@@ -322,7 +320,7 @@ public class AlgoritmoGenetico
 		
 		// 5. Se cruzan los individuos elegidos en un punto al azar
 		for (int i=0; i<numSelCruce; i+=2){
-			if (modoDebug){
+			if (parametros.modoDebug){
 				puntoCruce = (int) (siguienteAleatorio()*10 - 1);
 			} else {
 				puntoCruce = Operaciones.aleatorioEntre(0, longitudCromosoma - 1);
@@ -354,7 +352,7 @@ public class AlgoritmoGenetico
 		
 		// 3. Se eligen los individuos a cruzar
 		for (int i=0; i<parametros.getTamPoblacion(); i++){
-			if(modoDebug){
+			if(parametros.modoDebug){
 				prob = siguienteAleatorio();
 			} else {
 				prob=Math.random();
@@ -407,7 +405,7 @@ public class AlgoritmoGenetico
 		
 		// 3. Se eligen los individuos a cruzar
 		for (int i=0; i<parametros.getTamPoblacion(); i++){
-			if(modoDebug){
+			if(parametros.modoDebug){
 				prob = siguienteAleatorio();
 			} else {
 				prob=Math.random();
@@ -461,7 +459,7 @@ public class AlgoritmoGenetico
 		for (int i = 0; i < parametros.getTamPoblacion(); i++) {
 			pobMutante[i] = pob[i].clone();
 			for (int j = 0; j < longitudCromosoma; j++) {
-				if (modoDebug) {
+				if (parametros.modoDebug) {
 					random = siguienteAleatorio();
 				}else{
 					random = Math.random();
@@ -523,16 +521,18 @@ public class AlgoritmoGenetico
 	}
 	
 	/**
-	 * El operador de cruce toma dos padres y genera dos cadenas hijas.
-	 * La función calcula la aptitud de los nuevos individuos.
- 	 *
+	 * |A|B|C|   |A'|B'|C'|    |A |B |C |   
+	 * |D|E|F| + |D'|E'|F'| => |D'|E'|F'| 
+	 * |G|H|I|   |G'|H'|I'|    |G |H |I |
+ 	 *       (DEF)
+ 	 * 
 	 * @param Cromosoma padre
 	 * @param Cromosoma madre
 	 * @param Cromosoma hijo1 (hijo)
 	 * @param Cromosoma hijo2 (hija)
 	 * @param puntoCruce
 	 */
-	private Cromosoma[] cruceDosPuntos(Cromosoma padre, Cromosoma madre, int puntoCruce1, int puntoCruce2,Parametros parametros) 
+	public Cromosoma[] cruceDosPuntos(Cromosoma padre, Cromosoma madre, int puntoCruce1, int puntoCruce2,Parametros parametros) 
 	{
 		
 		//Inicializamos los hijos
