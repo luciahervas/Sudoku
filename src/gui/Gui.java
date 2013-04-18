@@ -346,7 +346,7 @@ public class Gui extends JFrame
 
 	public void pintaEsto(Cromosoma cromosoma) {
 		int[][] fijos = this.getParametros().getFijos(); 
-		int[][] tablero = cromosoma.getFenotipo();
+		int[][] tablero = cromosoma.dameMatriz();
 		boolean[][] bofijos = new boolean[9][9];
 		for (int i=0; i<9; i++)
 			for (int j=0; j<9; j++)

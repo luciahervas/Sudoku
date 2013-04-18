@@ -55,15 +55,34 @@ public class Cromosoma
 		calcularAptitud();
 	}
 	
+	public int[][] dameMatriz()
+	{
+		int [][] matriz=new int[9][9];
+		for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				matriz[i][j] = this.getGenes()[i].getCuadricula()[j];
+			}
+		}
+		return matriz;
+	}
+	
 	private void calcularFenotipo()
 	{
 		for(int i=0; i<9; i++){
 			for(int j=0; j<9; j++){
-				this.fenotipo[i][j] = this.genes[i].getCuadricula()[j];
+				this.fenotipo[i][j] = tranformar(this.genes,i,j);
 			}
 		}
 	}
 
+	private int tranformar(Gen[] cromosoma, int i, int j) {
+		int x = i;
+		int y = j;
+		j = x/3 + (y/3)*3;
+		i = x%3 + (y%3)*3;
+		return cromosoma[i].getCuadricula()[j];
+	}
+	
 	private void calcularAptitud()
 	{	
 		int aux=0;
@@ -81,7 +100,6 @@ public class Cromosoma
 				this.aptitud = aux;
 			break;
 		}				
-		this.aptitud = aux; 
 	}
 	
 	private int calcularAptitudConRepetidos()
