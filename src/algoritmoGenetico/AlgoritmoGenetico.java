@@ -1,7 +1,9 @@
 package algoritmoGenetico;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Arrays;
 
 import controlador.Parametros;
 
@@ -251,10 +253,20 @@ public class AlgoritmoGenetico
 	}
 	
 	/**
-	 * La funcion de seleccion escoge un numero de supervivientes
-	 * igual al tam de la poblacion.
+	 * Seleccionar TAM_POBLACION individuos
 	 * 
-	 * Metodo de seleccion => Ranking
+	 * Metodo de seleccion => Ranking lineal
+	 * 
+	 * Ejemplo
+	 * 
+	 * | A | 21     | C | 1
+	 * | B | 32 ==> | A | 2
+	 * | C | 3      | B | 3
+	 * 
+	 * puntuacion = (2-SP) + 2(SP -1) * [(pos - 1)/TAM_POBLACION -1]
+	 * ruleta.
+	 * 
+	 * fuente : http://www.herrera.unt.edu.ar/gapia/Curso_AG/Curso_AG_08_Clase_4.pdf
 	 * 
 	 * @param poblacion
 	 * @param parametros del problema
@@ -262,8 +274,31 @@ public class AlgoritmoGenetico
 	 */
 	private Cromosoma[] seleccionRanking(Cromosoma[] pob, Parametros parametros)
 	{
-		//TODO
-		return null;
+		// 1) ordenar los individuos segun su aptitud
+		Comparator<Cromosoma> c = new Comparator<Cromosoma>()
+		{
+			@Override
+			public int compare(Cromosoma o1, Cromosoma o2)
+			{
+				if (o1.getAptitud() > o2.getAptitud()) return 1;
+				else if(o1.getAptitud() < o2.getAptitud()) return -1;
+				else return 0;
+			}
+		};
+		Arrays.sort(pob, c);
+		
+		// 2) en el campo "puntuacionAcumulada" almacenamos el valor lineal segun la formula
+		int tam = parametros.getTamPoblacion();
+		for (int i=0; i<tam; i++){
+			double aux = ((double) (i)) / ( ((double)(tam)) - 1);
+			double puntuacion = (2-parametros.getSP());
+			puntuacion += 2 * (parametros.getSP()-1) * aux;
+			int p = (int) (puntuacion*10); //FIXME por que la puntuacion es int??? estoy obligado a *10
+			pob[i].setPuntuacionAcumulada(p);
+		}
+		
+		// 3) llamar a ruleta
+		return seleccionRuleta(pob, parametros);
 	}
 	
 	/**
@@ -282,6 +317,8 @@ public class AlgoritmoGenetico
 	 * | 3  | A |
 	 * | 12 | A |
 	 * | 21 | A |
+	 * 
+	 * fuente : http://catarina.udlap.mx/u_dl_a/tales/documentos/msp/rodriguez_m_m/capitulo3.pdf
 	 * 
 	 * @param poblacion
 	 * @param parametros del problema

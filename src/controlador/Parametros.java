@@ -12,7 +12,8 @@ package controlador;
  *  | double | mutacion 					| 0.1 					|
  *  | double | elitismo 					| 1 					|
  *  | int    | seleccion					| 1 					|
- *  | int[]  | fijos
+ *  | int[]  | fijos 						| new [][] 				|
+ *  | double | SP							| 1.2 					|
  *  
  * Nota: llamar a la contructora vacia para asignar los valores por defecto 
  * 	
@@ -32,6 +33,7 @@ public class Parametros
 	public static final double PROB_MUTACION_DEFECTO = 0.1;
 	public static final double ELITISMO_DEFECTO = 0.05;
 	public static final int FUNC_DEFECTO = 0;
+	public static final double SP_DEFECTO = 1.2;
 	
 	/* Atributos */
 	private int tamPoblacion;
@@ -44,6 +46,7 @@ public class Parametros
 	private int funcMutacion;
 	private int funcAptitud;
 	private int[][] fijos;
+	private double SP;
 	
 	/**
 	 * 
@@ -58,7 +61,7 @@ public class Parametros
 	 * @param funcionAptitud
 	 */
 	public Parametros (	int tam, int generaciones, double cruce, double mutacion, double elitismo,
-						int funcSeleccion, int funcCruce, int funcMutacion, int funcAptitud )
+						int funcSeleccion, int funcCruce, int funcMutacion, int funcAptitud, double SP )
 	{
 		this.tamPoblacion = tam;
 		this.numGeneraciones = generaciones;
@@ -85,6 +88,7 @@ public class Parametros
 		} else {
 			this.funcAptitud = FUNC_DEFECTO;
 		}
+		this.SP = SP;
 		this.fijos = new int[0][0];
 	}
 	
@@ -99,6 +103,7 @@ public class Parametros
 		this.funcCruce = FUNC_DEFECTO;
 		this.funcMutacion = FUNC_DEFECTO;
 		this.funcAptitud = FUNC_DEFECTO;
+		this.SP = SP_DEFECTO;
 		this.fijos = new int[9][9];
 	}
 	
@@ -123,6 +128,8 @@ public class Parametros
 	public void setFuncMutacion(int funcMutacion) {this.funcMutacion = funcMutacion;}
 	public int getFuncAptitud() {return funcAptitud;}
 	public void setFuncAptitud(int funcAptitud) {this.funcAptitud = funcAptitud;}
+	public double getSP() {return this.SP;}
+	public void setSP(double SP) {this.SP = SP;}
 	
 	/* Funciones auxiliares */
 	private boolean estaContenido(int v)
