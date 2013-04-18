@@ -284,12 +284,21 @@ public class Gui extends JFrame
 		itemPredefinido.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int[][] tablero = GeneradorSudokus.enunciadoSudoku();
+				int[][] tablero;
+				double random = Math.random();
+				if (random < 0.5){
+					tablero = GeneradorSudokus.enunciadoSudoku1();
+				} else {
+					tablero = GeneradorSudokus.enunciadoSudoku2();
+				}
 				boolean[][] fijos = new boolean[9][9];
-				fijos = new boolean[9][9];
-				for (int i=0; i<9; i++)
-					for (int j=0; j<9; j++)
-						fijos[i][j]=true;
+				for (int i=0; i<9; i++){
+					for (int j=0; j<9; j++){
+						if (tablero[i][j] != 0){
+							fijos[i][j]=true;
+						}
+					}
+				}
 				tableroJuego.cambiarTablero(tablero,fijos);
 			}
 		});

@@ -168,7 +168,8 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		return coord;
 	}
 	
-	public void cambiarTablero(int[][] tableroNuevo, boolean[][] bofijos){
+	public void cambiarTablero(int[][] tableroNuevo, boolean[][] bofijos)
+	{
 		fijos=bofijos;
 		tablero=tableroNuevo;
 		this.repaint();

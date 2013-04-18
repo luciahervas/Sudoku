@@ -36,41 +36,19 @@ public class Cromosoma
 	public void setAptitud(int aptitud) {this.aptitud = aptitud;}
 	public int getPuntuacionAcumulada() {return puntuacionAcumulada;}
 	public void setPuntuacionAcumulada(int puntuacionAcumulada) {this.puntuacionAcumulada = puntuacionAcumulada;}
+	public static void setFuncAptitud(int funcAptitud){Cromosoma.funcAptitud = funcAptitud;}
+	
 	
 	/* Metodos implementados */
-	
-	/**
-	* Metodo que genera una cadena aleatoria de genes.
-	* Ejemplo: inicializarGenes(6) => [1,0,0,0,1,0]
-	*
-	* @param longitud de la cadena a generar
-	* @return cadena de genes (valores booleanos)
-	*/
-	protected boolean[] inicializarGenes(int longitud)
-		{
-		boolean[] genes = new boolean[longitud];
-		
-		double numero;
-		for (int i = 0; i<longitud; i++) {
-			numero = Math.random();
-			if (numero < 0.5){
-				genes[i] = false;
-			} else {
-				genes[i] = true;
-			}
-		}	
-		return genes;
-	}
-	
-	public static void setFuncAptitud(int funcAptitud){
-		Cromosoma.funcAptitud = funcAptitud;
-	}
 	
 	@Override
 	public Cromosoma clone(){
 		return new Cromosoma(genes.clone(),fenotipo,aptitud,puntuacionAcumulada);
 	}
 	
+	/**
+	 * Calcula el fenotipo y la aptitud
+	 */
 	public void evaluarCromosoma() 
 	{
 		calcularFenotipo();

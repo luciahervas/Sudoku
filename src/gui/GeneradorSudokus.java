@@ -1,43 +1,45 @@
 package gui;
 
-public class GeneradorSudokus {
-	public static int[][] enunciadoSudoku()
+public class GeneradorSudokus 
+{
+	public static int numeroEnunciados = 2;
+	
+	public static int[][] enunciadoSudoku1()
 	{
-		int[][] tablero = new int[9][9];
-		tablero[0][1] = 6;
-		tablero[0][5] = 8;
-		tablero[0][6] = 2;
-		tablero[1][0] = 1;
-		tablero[1][2] = 4;
-		tablero[1][3] = 3;
-		tablero[1][5] = 5;
-		tablero[2][1] = 5;
-		tablero[2][3] = 6;
-		tablero[2][8] = 1;
-		tablero[3][0] = 8;
-		tablero[3][5] = 6;
-		tablero[3][6] = 7;
-		tablero[4][0] = 4;
-		tablero[4][2] = 7;
-		tablero[4][6] = 9;
-		tablero[4][8] = 1;
-		tablero[5][2] = 6;
-		tablero[5][3] = 3;
-		tablero[5][8] = 4;
-		tablero[6][0] = 5;
-		tablero[6][5] = 7;
-		tablero[6][7] = 4;
-		tablero[7][3] = 2;
-		tablero[7][5] = 6;
-		tablero[7][6] = 5;
-		tablero[7][8] = 8;
-		tablero[8][2] = 2;
-		tablero[8][3] = 9;
-		tablero[8][7] = 7;
-		return tablero;
+		int[] fa = {0,6,0,0,0,8,2,0,0};
+		int[] fb = {1,0,4,3,0,5,0,0,0};
+		int[] fc = {0,5,0,6,0,0,0,0,1};
+		
+		int[] fd = {8,0,0,0,0,6,7,0,0};
+		int[] fe = {4,0,7,0,0,0,9,0,1};
+		int[] ff = {0,0,6,3,0,0,0,0,4};
+		
+		int[] fg = {5,0,0,0,0,7,0,4,0};
+		int[] fh = {0,0,0,2,0,6,5,0,8};
+		int[] fi = {0,0,2,9,0,0,0,7,0};
+
+		int[][] r = {fa,fb,fc,fd,fe,ff,fg,fh,fi};
+		return r;
 	}
 	
-
+	public static int[][] enunciadoSudoku2()
+	{
+		int[] fa= {0,0,7,1,9,0,0,2,8};
+		int[] fb= {0,0,6,0,0,4,7,0,0};
+		int[] fc= {0,0,8,0,0,5,4,0,0};
+		
+		int[] fd= {3,0,0,0,0,0,0,7,0};
+		int[] fe= {4,0,1,0,0,8,0,0,0};
+		int[] ff= {0,0,6,9,1,0,0,2,0};
+		
+		int[] fg= {0,0,0,0,0,0,2,0,0};
+		int[] fh= {0,0,0,1,0,0,0,9,0};
+		int[] fi= {3,5,2,0,0,0,0,6,0};
+		
+		int[][] r = {fa,fb,fc,fd,fe,ff,fg,fh,fi};
+		return r;
+	}
+	/*
 	public static int[][] enunciadoSudokuCaca()
 	{		
 		int[][] m1 = 
@@ -56,5 +58,5 @@ public class GeneradorSudokus {
 		};
 		return m1;
 	}
-	
+	*/
 }
