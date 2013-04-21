@@ -1,11 +1,13 @@
 package gui;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import org.math.plot.Plot2DPanel;
 
-public class VentanaEmergente extends JFrame
+public class VentanaEmergente extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -18,6 +20,7 @@ public class VentanaEmergente extends JFrame
 	public VentanaEmergente()
 	{
 		super();
+		this.addWindowListener(this);
 		grafica = new Plot2DPanel();
 		this.add(grafica);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,5 +46,46 @@ public class VentanaEmergente extends JFrame
 		grafica.addLinePlot("Cromosoma mejor de cada generaci—n", x, mejores);
 		grafica.addLinePlot("Cromosoma mejor encontrado", x, gokus);
 		grafica.addLinePlot("Media de cada generaci—n", x, medias);
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		this.setVisible(false);		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

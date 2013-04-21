@@ -1,7 +1,9 @@
 package algoritmoGenetico;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Arrays;
 
 import controlador.Parametros;
 
@@ -13,7 +15,6 @@ public class AlgoritmoGenetico
 {
 	private static double[] numerosAleatorios = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 	private static int numeroActual;
-	private int longitudCromosoma;
 
 	private static double siguienteAleatorio()
 	{
@@ -36,7 +37,6 @@ public class AlgoritmoGenetico
 	 * Busca: 
 	 *  - el mejor cromosoma obtenido tras todas las genraciones (Goku)
 	 *  - la lista de los mejores cromosomas en cada generacion (mejoresCromosomas)
-	 *  - los picos
 	 *  
 	 * @param parametros del problema
 	 */
@@ -88,17 +88,19 @@ public class AlgoritmoGenetico
 				case 2:
 					pob = reproduccionPMX(pob, parametros);
 					break;
+				case 3:
+					pob = reproduccionOX(pob, parametros);
+					break;
 				default:
 			}	
 			
 			// 3) mutacion
-			switch(parametros.getFuncCruce()) {
+			switch(parametros.getFuncMutacion()) {
 				case 0:
 					pob = mutacion(pob, parametros); 
 					break;
 				case 1:
-					// TODO
-					pob = mutacion(pob, parametros);
+					pob = mutacionIntervalo(pob, parametros);
 					break;
 				default:
 			}
@@ -109,7 +111,7 @@ public class AlgoritmoGenetico
 			// 5) tratar la nueva solucion
 			pos_mejor = evaluarPoblacion(pob);
 			
-			if(i == 0){	
+			if (i == 0) {	
 				mejor = pob[pos_mejor].clone();
 			} else {
 				if (pob[pos_mejor].getAptitud() > mejor.getAptitud()){
@@ -208,11 +210,10 @@ public class AlgoritmoGenetico
 				random = Math.random();
 			}
 			posicionSuperviviente = 0;
-			while ( (random > pob[posicionSuperviviente].getPuntuacionAcumulada()) &&
-					(posicionSuperviviente < parametros.getTamPoblacion()) ) {
+			while ((posicionSuperviviente < parametros.getTamPoblacion()) &&
+					(random > pob[posicionSuperviviente].getPuntuacionAcumulada()) ) {
 				posicionSuperviviente++;
-			}
-			
+			}			
 			poblacionSeleccionada[i] = (Cromosoma) pob[posicionSuperviviente].clone();
 		}
 		
@@ -251,10 +252,20 @@ public class AlgoritmoGenetico
 	}
 	
 	/**
-	 * La funcion de seleccion escoge un numero de supervivientes
-	 * igual al tam de la poblacion.
+	 * Seleccionar TAM_POBLACION individuos
 	 * 
-	 * Metodo de seleccion => Ranking
+	 * Metodo de seleccion => Ranking lineal
+	 * 
+	 * Ejemplo
+	 * 
+	 * | A | 21     | C | 1
+	 * | B | 32 ==> | A | 2
+	 * | C | 3      | B | 3
+	 * 
+	 * puntuacion = (2-SP) + 2(SP -1) * [(pos - 1)/TAM_POBLACION -1]
+	 * ruleta.
+	 * 
+	 * fuente : http://www.herrera.unt.edu.ar/gapia/Curso_AG/Curso_AG_08_Clase_4.pdf
 	 * 
 	 * @param poblacion
 	 * @param parametros del problema
@@ -262,15 +273,56 @@ public class AlgoritmoGenetico
 	 */
 	private Cromosoma[] seleccionRanking(Cromosoma[] pob, Parametros parametros)
 	{
-		//TODO
-		return null;
+		// 1) ordenar los individuos segun su aptitud
+		Comparator<Cromosoma> c = new Comparator<Cromosoma>()
+		{
+			@Override
+			public int compare(Cromosoma o1, Cromosoma o2)
+			{
+				if (o1.getAptitud() > o2.getAptitud()) return 1;
+				else if(o1.getAptitud() < o2.getAptitud()) return -1;
+				else return 0;
+			}
+		};
+		Arrays.sort(pob, c);
+		
+		// 2) en el campo "puntuacionAcumulada" almacenamos el valor lineal segun la formula
+		int tam = parametros.getTamPoblacion();
+		double puntuacion=0;
+		for (int i=0; i<tam; i++){
+			double beta = 1.5; //TODO: beta podría ser una parámetro de la aplicación
+			double aux = ((double) (i-1)) / ( ((double)(tam)) - 1);
+			aux = 2*(beta-1)*aux;
+			aux = beta - aux;
+			double aux2 = 1/((double)tam); 
+			aux = aux2*aux; 
+			
+			puntuacion += aux ;
+			pob[i].setPuntuacionAcumulada(puntuacion);
+		}
+		
+		// 3) llamar a ruleta
+		return seleccionRuleta(pob, parametros);
 	}
 	
 	/**
-	 * La funcion de seleccion escoge un numero de supervivientes
-	 * igual al tam de la poblacion.
+	 * Seleccionar TAM_POBLACION individuos.
 	 * 
 	 * Metodo de seleccion => Universal estocastico
+	 * 
+	 * Ejemplo
+	 * 
+	 * | A | 23 | 
+	 * | B | 26 |
+	 * | C | 27 |
+	 * 
+	 * escoger 3 individuos: 27/3 = 9 => random(0,9) = 3
+	 * 
+	 * | 3  | A |
+	 * | 12 | A |
+	 * | 21 | A |
+	 * 
+	 * fuente : http://catarina.udlap.mx/u_dl_a/tales/documentos/msp/rodriguez_m_m/capitulo3.pdf
 	 * 
 	 * @param poblacion
 	 * @param parametros del problema
@@ -278,8 +330,41 @@ public class AlgoritmoGenetico
 	 */
 	private Cromosoma[] seleccionUniversalEstocastico(Cromosoma[] pob, Parametros parametros)
 	{
-		//TODO
-		return null;
+		Cromosoma[] poblacionSeleccionada = new Cromosoma[parametros.getTamPoblacion()];
+		
+		// obtener la suma total de aptitudes de la poblacion y la puntuacion acumulada para cada individuo
+		int suma = 0;
+		for(int i=0; i<pob.length; i++){
+			suma+=pob[i].getAptitud();
+			pob[i].setPuntuacionAcumulada(suma);
+		}
+		
+		// obtener los marcadores equalitariamente y generar el primer marcador
+		int distanciaMarcadores = (int) (suma / parametros.getTamPoblacion());
+		int marcadorActual;
+		
+		if (parametros.modoDebug)
+			marcadorActual = 3;
+		else
+			marcadorActual = Operaciones.aleatorioEntre(0, distanciaMarcadores);
+		
+		// escogemos TAM_POBLACION individuos segun el metodo estocastico universal
+		int indivudoInspeccionado = 0;
+		boolean escogido = false;
+		for(int i = 0; i<parametros.getTamPoblacion(); i++){
+			escogido = false;
+			while (!escogido) {
+				if ( pob[indivudoInspeccionado].getPuntuacionAcumulada() >= marcadorActual ){
+					poblacionSeleccionada[i] = pob[indivudoInspeccionado].clone();
+					escogido = true;
+				} else {
+					indivudoInspeccionado++;
+				}
+			}
+			marcadorActual += distanciaMarcadores;
+		}
+		
+		return poblacionSeleccionada;
 	}
 
 	/**
@@ -323,7 +408,7 @@ public class AlgoritmoGenetico
 			if (parametros.modoDebug){
 				puntoCruce = (int) (siguienteAleatorio()*10 - 1);
 			} else {
-				puntoCruce = Operaciones.aleatorioEntre(0, longitudCromosoma - 1);
+				puntoCruce = Operaciones.aleatorioEntre(0, 9 - 1);
 			}
 			Cromosoma[] cromos = cruce(pob[selCruce[i]],pob[selCruce[i+1]],puntoCruce,parametros);
 			//los nuevos individuos sustituyen a sus progenitores
@@ -444,6 +529,20 @@ public class AlgoritmoGenetico
 		}
 		return pob;
 	}
+	
+
+	/**
+	 * La reproduccion consiste en la seleccion de los individuos a reproducirse
+	 * y en la aplicacion del operador de cruce a cada una de las parejas.
+	 * 
+	 * @param poblacion
+	 * @param parametros del problema
+	 * @return nueva poblacion resultante
+	 */
+	private Cromosoma[] reproduccionOX(Cromosoma[] pob, Parametros parametros) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * La mutacion cambia ciertos genes de ciertos individuos de la poblacion
@@ -458,7 +557,7 @@ public class AlgoritmoGenetico
 		double random;
 		for (int i = 0; i < parametros.getTamPoblacion(); i++) {
 			pobMutante[i] = pob[i].clone();
-			for (int j = 0; j < longitudCromosoma; j++) {
+			for (int j = 0; j < 9; j++) {
 				if (parametros.modoDebug) {
 					random = siguienteAleatorio();
 				}else{
@@ -473,6 +572,35 @@ public class AlgoritmoGenetico
 		
 		return pobMutante;
 		
+	}
+	
+
+	/**
+	 * La mutacion cambia ciertos genes de ciertos individuos de la poblacion
+	 * 
+	 * @param poblacion
+	 * @param paramametros del problema
+	 */
+	private Cromosoma[] mutacionIntervalo(Cromosoma[] pob, Parametros parametros) {
+		Cromosoma[] pobMutante = new Cromosoma[parametros.getTamPoblacion()];
+		
+		double random;
+		for (int i = 0; i < parametros.getTamPoblacion(); i++) {
+			pobMutante[i] = pob[i].clone();
+			for (int j = 0; j < 9; j++) {
+				if (parametros.modoDebug) {
+					random = siguienteAleatorio();
+				}else{
+					random = Math.random();
+				}
+				if (random < parametros.getProbMutacion()) {
+					pobMutante[i].mutaGenIntervalo(j);
+					pobMutante[i].evaluarCromosoma();
+				}
+			}
+		}
+		
+		return pobMutante;
 	}
 
 	/**
@@ -503,7 +631,7 @@ public class AlgoritmoGenetico
 		// segunda parte del intercambio:
 		// copiar desde el punto de cruce hasta el final del otro progenitor
 		
-		for (int i = puntoCruce; i < longitudCromosoma; i++){
+		for (int i = puntoCruce; i < 9; i++){
 			hija.setGen(i, padre.getGenes()[i]);
 			hijo.setGen(i, madre.getGenes()[i]);
 		}
@@ -558,7 +686,7 @@ public class AlgoritmoGenetico
 		// tercera parte del intercambio:
 		// copiar desde el punto de cruce 2 hasta el final del otro progenitor
 		
-		for (int i = puntoCruce2; i < longitudCromosoma; i++){
+		for (int i = puntoCruce2; i < 9; i++){
 			hijo.setGen(i, padre.getGenes()[i]);
 			hija.setGen(i, madre.getGenes()[i]);
 		}
@@ -685,7 +813,7 @@ public class AlgoritmoGenetico
 		
 		for (int i = 0; i< poblacion.length; i++) {
 			puntuacionAcumulada+=poblacion[i].getAptitud();
-			poblacion[i].setPuntuacionAcumulada((int) (puntuacionAcumulada/sumaAptitudes));
+			poblacion[i].setPuntuacionAcumulada(puntuacionAcumulada/sumaAptitudes);
 		}
 		
 		return pos_mejor;

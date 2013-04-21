@@ -6,7 +6,7 @@ public class Cromosoma
 	private Gen[] genes;
 	private int[][] fenotipo;
 	private int aptitud;
-	private int puntuacionAcumulada;
+	private double puntuacionAcumulada;
 	
 	private static int funcAptitud;
 	
@@ -19,7 +19,7 @@ public class Cromosoma
 		fenotipo = new int[9][9];
 		evaluarCromosoma(); //Calcula fenotipo y aptitud
 	}
-	public Cromosoma(Gen[] genes, int[][] fenotipo, int aptitud, int puntuacionAcumulada)
+	public Cromosoma(Gen[] genes, int[][] fenotipo, int aptitud, double puntuacionAcumulada)
 	{
 		this.genes = genes;
 		this.fenotipo = fenotipo;
@@ -34,8 +34,8 @@ public class Cromosoma
 	public void setFenotipo(int[][] fenotipo) {this.fenotipo = fenotipo;}
 	public int getAptitud() {return aptitud;}
 	public void setAptitud(int aptitud) {this.aptitud = aptitud;}
-	public int getPuntuacionAcumulada() {return puntuacionAcumulada;}
-	public void setPuntuacionAcumulada(int puntuacionAcumulada) {this.puntuacionAcumulada = puntuacionAcumulada;}
+	public double getPuntuacionAcumulada() {return puntuacionAcumulada;}
+	public void setPuntuacionAcumulada(double puntuacionAcumulada) {this.puntuacionAcumulada = puntuacionAcumulada;}
 	public static void setFuncAptitud(int funcAptitud){Cromosoma.funcAptitud = funcAptitud;}
 	
 	
@@ -55,15 +55,34 @@ public class Cromosoma
 		calcularAptitud();
 	}
 	
+	public int[][] dameMatriz()
+	{
+		int [][] matriz=new int[9][9];
+		for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				matriz[i][j] = this.getGenes()[i].getCuadricula()[j];
+			}
+		}
+		return matriz;
+	}
+	
 	private void calcularFenotipo()
 	{
 		for(int i=0; i<9; i++){
 			for(int j=0; j<9; j++){
-				this.fenotipo[i][j] = this.genes[i].getCuadricula()[j];
+				this.fenotipo[i][j] = tranformar(this.genes,i,j);
 			}
 		}
 	}
 
+	private int tranformar(Gen[] cromosoma, int i, int j) {
+		int x = i;
+		int y = j;
+		j = x/3 + (y/3)*3;
+		i = x%3 + (y%3)*3;
+		return cromosoma[i].getCuadricula()[j];
+	}
+	
 	private void calcularAptitud()
 	{	
 		int aux=0;
@@ -81,7 +100,6 @@ public class Cromosoma
 				this.aptitud = aux;
 			break;
 		}				
-		this.aptitud = aux; 
 	}
 	
 	private int calcularAptitudConRepetidos()
@@ -153,11 +171,38 @@ public class Cromosoma
 	 * @param j e [0,8]
 	 */
 	public void mutaGen(int j) {
-		int a = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].getFijos());
-		int b = Operaciones.aleatorioEntreExcepto(1, 9, this.genes[j].getFijos());
+		int a = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
+		int b = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
 		int aux = this.genes[j].getCuadricula()[a];
 		this.genes[j].getCuadricula()[a] = this.genes[j].getCuadricula()[b];
 		this.genes[j].getCuadricula()[b] = aux;
+	}
+	
+
+	
+	/**
+	 * Mutar un cuadrante en un intervalo
+	 * 
+	 * @param j e [0,8]
+	 */
+	public void mutaGenIntervalo(int j) {
+		int random1 = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
+		int random2 = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
+		// tien que ser (random1 < random2)
+		if (random1>random2){
+			int aux=random1;
+			random1=random2;
+			random2=aux;
+		}
+		int[] aux = new int[random2-random1];
+		for (int i=random1; i<random2; i++){
+			aux[i-random1]=this.genes[j].getCuadricula()[i];
+		}
+		int indice = 0;
+		for (int i=random2-1; i>=random1; i--){
+			this.genes[j].getCuadricula()[i]=aux[indice];
+			indice++;
+		}
 	}
 	
 	public void setGen(int i, Gen gen) {
