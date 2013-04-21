@@ -253,11 +253,19 @@ public class AlgoritmoGenetico
 	
 	/**
 	 * Seleccionar TAM_POBLACION individuos
+<<<<<<< HEAD
 	 * 
 	 * Metodo de seleccion => Ranking lineal
 	 * 
 	 * Ejemplo
 	 * 
+=======
+	 * 
+	 * Metodo de seleccion => Ranking lineal
+	 * 
+	 * Ejemplo
+	 * 
+>>>>>>> 885082ee7272aa0b5c6e98ae43f2cb557d082517
 	 * | A | 21     | C | 1
 	 * | B | 32 ==> | A | 2
 	 * | C | 3      | B | 3
@@ -299,6 +307,7 @@ public class AlgoritmoGenetico
 			
 			puntuacion += aux ;
 			pob[i].setPuntuacionAcumulada(puntuacion);
+
 		}
 		
 		// 3) llamar a ruleta
