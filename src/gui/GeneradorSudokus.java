@@ -56,8 +56,7 @@ public class GeneradorSudokus
 		return r;
 	}
 	
-	/*
-	public static int[][] enunciadoSudokuCaca()
+	public static int[][] enunciadoTest1()
 	{		
 		int[][] m1 = 
 		{
@@ -75,5 +74,25 @@ public class GeneradorSudokus
 		};
 		return m1;
 	}
-	*/
+	
+	public static int[][] enunciadoTest2()
+	{
+		int[][] m2 = 
+			{
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				
+				{	4,5,6,	1,2,3,	7,8,9, 	},
+				{	4,5,6,	1,2,3,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				
+			};
+		return m2;
+	}
+	
 }

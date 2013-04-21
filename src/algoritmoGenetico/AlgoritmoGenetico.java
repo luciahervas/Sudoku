@@ -253,19 +253,11 @@ public class AlgoritmoGenetico
 	
 	/**
 	 * Seleccionar TAM_POBLACION individuos
-<<<<<<< HEAD
 	 * 
 	 * Metodo de seleccion => Ranking lineal
 	 * 
 	 * Ejemplo
 	 * 
-=======
-	 * 
-	 * Metodo de seleccion => Ranking lineal
-	 * 
-	 * Ejemplo
-	 * 
->>>>>>> 885082ee7272aa0b5c6e98ae43f2cb557d082517
 	 * | A | 21     | C | 1
 	 * | B | 32 ==> | A | 2
 	 * | C | 3      | B | 3
@@ -633,16 +625,16 @@ public class AlgoritmoGenetico
 		// copiar progenitor desde el principio hasta el punto de cruce
 		
 		for (int i = 0; i < puntoCruce; i++){
-			hijo.setGen(i, padre.getGenes()[i]);
-			hija.setGen(i, madre.getGenes()[i]);
+			hijo.setGen(i, padre.getGenes()[i].clone());
+			hija.setGen(i, madre.getGenes()[i].clone());
 		}
 		
 		// segunda parte del intercambio:
 		// copiar desde el punto de cruce hasta el final del otro progenitor
 		
 		for (int i = puntoCruce; i < 9; i++){
-			hija.setGen(i, padre.getGenes()[i]);
-			hijo.setGen(i, madre.getGenes()[i]);
+			hija.setGen(i, padre.getGenes()[i].clone());
+			hijo.setGen(i, madre.getGenes()[i].clone());
 		}
 		
 		// evaluar los nuevos individuos		
@@ -680,24 +672,24 @@ public class AlgoritmoGenetico
 		// copiar progenitor desde el principio hasta el punto de cruce 1
 		
 		for (int i = 0; i < puntoCruce1; i++){
-			hijo.setGen(i, padre.getGenes()[i]);
-			hija.setGen(i, madre.getGenes()[i]);
+			hijo.setGen(i, padre.getGenes()[i].clone());
+			hija.setGen(i, madre.getGenes()[i].clone());
 		}
 		
 		// segunda parte del intercambio:
 		// copiar desde el punto de cruce 1 hasta el punto de cruce 2
 		
 		for (int i = puntoCruce1; i < puntoCruce2; i++){
-			hija.setGen(i, padre.getGenes()[i]);
-			hijo.setGen(i, madre.getGenes()[i]);
+			hija.setGen(i, padre.getGenes()[i].clone());
+			hijo.setGen(i, madre.getGenes()[i].clone());
 		}
 		
 		// tercera parte del intercambio:
 		// copiar desde el punto de cruce 2 hasta el final del otro progenitor
 		
 		for (int i = puntoCruce2; i < 9; i++){
-			hijo.setGen(i, padre.getGenes()[i]);
-			hija.setGen(i, madre.getGenes()[i]);
+			hijo.setGen(i, padre.getGenes()[i].clone());
+			hija.setGen(i, madre.getGenes()[i].clone());
 		}
 		
 		// evaluar los nuevos individuos		
@@ -744,6 +736,7 @@ public class AlgoritmoGenetico
 	private void quitarRepes(LinkedList<Integer> l1, LinkedList<Integer> l2)
 	{
 		Iterator<Integer> it = l1.iterator();
+		@SuppressWarnings("unchecked")
 		LinkedList<Integer> aux = (LinkedList<Integer>) l1.clone();
 		
 		while(it.hasNext()) {
@@ -760,6 +753,7 @@ public class AlgoritmoGenetico
 	
 	private void borroElemento(LinkedList<Integer> lista, Integer i) 
 	{
+		@SuppressWarnings("unchecked")
 		LinkedList<Integer> laux = (LinkedList<Integer>) lista.clone();
 		Iterator<Integer> it = laux.iterator();
 		

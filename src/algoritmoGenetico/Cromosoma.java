@@ -65,13 +65,28 @@ public class Cromosoma
 		}
 		return matriz;
 	}
+
+	@Override
+	public String toString(){return this.fenotipo.toString();}
 	
+	/**
+	 * Calcular fenotipo de Manu
+	 */
 	private void calcularFenotipo()
+	{
+		for(int i=0; i<9; i++){ this.getFenotipo()[i] = genes[i].getCuadricula(); }
+	}
+	
+	/**
+	 * Calcular fenotipo de Lucia
+	 */
+	private void _calcularFenotipo()
 	{
 		for(int i=0; i<9; i++){
 			for(int j=0; j<9; j++){
 				this.fenotipo[i][j] = tranformar(this.genes,i,j);
 			}
+			
 		}
 	}
 
@@ -134,6 +149,7 @@ public class Cromosoma
 			int suma = sumarFila(fenotipo[i]);
 			penalizacionSuma += Math.abs(suma - 45);
 		}
+		//return Math.abs(405 - penalizacionSuma); // XXX:  45 * 9 = 405
 		return penalizacionSuma;
 	}
 	
@@ -144,6 +160,7 @@ public class Cromosoma
 			int prod = multiplicarFila(fenotipo[i]);
 			penalizacionProd += Math.abs(prod - 362880);
 		}
+		// return Math.abs(3265920 - penalizacionProd); // XXX: 362880 * 9 = 3265920
 		return penalizacionProd;
 	}
 	
@@ -173,6 +190,8 @@ public class Cromosoma
 	public void mutaGen(int j) {
 		int a = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
 		int b = Operaciones.aleatorioEntreExcepto(1, 8, this.genes[j].getFijos());
+		if ( (a == -1) || (b == -1) ) return;
+		
 		int aux = this.genes[j].getCuadricula()[a];
 		this.genes[j].getCuadricula()[a] = this.genes[j].getCuadricula()[b];
 		this.genes[j].getCuadricula()[b] = aux;

@@ -1,5 +1,6 @@
 package controlador;
 
+import gui.GeneradorSudokus;
 import gui.Gui;
 import gui.VentanaEmergente;
 import algoritmoGenetico.AlgoritmoGenetico;
@@ -47,5 +48,27 @@ public class Controlador
 	{
 		@SuppressWarnings("unused")
 		Controlador c = new Controlador();		
+	}
+	
+	// --------------------------------------------
+	
+	public static void _main(String[] args)
+	{
+		AlgoritmoGenetico g = new AlgoritmoGenetico();
+		int[][] m1 = GeneradorSudokus.enunciadoTest1();
+		int[][] m2 = GeneradorSudokus.enunciadoTest2();
+		Cromosoma s1 = new Cromosoma(m1);
+		Cromosoma s2 = new Cromosoma(m2);
+		
+		// Cruces
+		Cromosoma[] hijos = new Cromosoma[2];
+		hijos = g.cruceDosPuntos(s1, s2, 3, 6, new Parametros());
+		if (m2.equals(hijos[0].getFenotipo())){
+			if(m1.equals(hijos[1].getFenotipo())){
+				System.out.println("Correcto");
+			}
+		}
+		
+		// Cruces
 	}
 }

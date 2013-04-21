@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import controlador.Parametros;
+
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.Cromosoma;
 
 public class AlgoritmoGeneticoTest 
 {
+	AlgoritmoGenetico g = new AlgoritmoGenetico();
 	
 	int[][] m1 = 
 	{
@@ -31,8 +34,8 @@ public class AlgoritmoGeneticoTest
 		{	1,2,3,	4,5,6,	7,8,9, 	},
 		{	1,2,3,	4,5,6,	7,8,9, 	},
 		
-		{	1,2,3,	4,5,6,	7,8,9, 	},
-		{	1,2,3,	4,5,6,	7,8,9, 	},
+		{	4,5,6,	1,2,3,	7,8,9, 	},
+		{	4,5,6,	1,2,3,	7,8,9, 	},
 		{	1,2,3,	4,5,6,	7,8,9, 	},
 		
 		{	1,2,3,	4,5,6,	7,8,9, 	},
@@ -51,45 +54,45 @@ public class AlgoritmoGeneticoTest
 	{
 		int[][] m1_esperado = 
 			{
-				{	1,2,3,	1,2,3,	1,2,3, 	},
-				{	4,5,6,	4,5,6,	4,5,6, 	},
-				{	7,8,9,	7,8,9,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 				
-				{	9,8,7,	9,8,7,	1,2,3, 	},
-				{	6,5,4,	6,5,4,	4,5,6, 	},
-				{	3,2,1,	3,2,1,	7,8,9, 	},
+				{	4,5,6,	1,2,3,	7,8,9, 	},
+				{	4,5,6,	1,2,3,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 				
-				{	1,2,3,	1,2,3,	1,2,3, 	},
-				{	4,5,6,	4,5,6,	4,5,6, 	},
-				{	7,8,9,	7,8,9,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 			};
 			
 			int[][] m2_esperado = 
 			{
-				{	1,2,3,	1,2,3,	1,2,3, 	},
-				{	4,5,6,	4,5,6,	4,5,6, 	},
-				{	7,8,9,	7,8,9,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 				
-				{	1,2,3,	4,5,6,	1,2,3, 	},
-				{	4,5,6,	9,8,7,	4,5,6, 	},
-				{	7,8,9,	1,2,3,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 				
-				{	1,2,3,	1,2,3,	1,2,3, 	},
-				{	4,5,6,	4,5,6,	4,5,6, 	},
-				{	7,8,9,	7,8,9,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
+				{	1,2,3,	4,5,6,	7,8,9, 	},
 			};
 			
-		Cromosoma s1_esperado = new Cromosoma(m1_esperado);
-		Cromosoma s2_esperado = new Cromosoma(m2_esperado);
-		
 		// ---------------------------------
 		
 		Cromosoma[] r = new Cromosoma[2];
-		r = new AlgoritmoGenetico().cruceDosPuntos(sudoku1, sudoku2, 3, 6, null);
-		System.out.println(r[0].getFenotipo());
+		r = g.cruceDosPuntos(sudoku1, sudoku2, 3, 6, new Parametros());
+		int[][] m1_obtenido = r[0].getFenotipo();
+		int[][] m2_obtenido = r[1].getFenotipo();
 		
-		//for(int i : )
-		
+		for (int i=0; i<9; i++){
+			assertArrayEquals(m1_esperado[i], m1_obtenido[i]);
+			assertArrayEquals(m2_esperado[i], m2_obtenido[i]);
+		}
 	}  
 	
 }
