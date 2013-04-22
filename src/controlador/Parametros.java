@@ -22,9 +22,6 @@ public class Parametros
 {
 	/* Algoritmos de seleccion disponibles */
 	private int[] valoresSeleccion = {0,1,2,3};
-	private int[] valoresCruce = {0,1,2};
-	private int[] valoresMutacion = {0,1};
-	private int[] valoresAptitud = {0,1};
 	
 	/* Valores por defecto */
 	public static final int TAM_POBLACION_DEFECTO = 100;

@@ -230,7 +230,7 @@ public class Gui extends JFrame
 		
 		// 13) panelFuncionCruce
 		formFuncionCruce = new JComboBox();
-		formFuncionCruce.setModel(new DefaultComboBoxModel(new String[] {"Cruce 1","Cruce 2"}));
+		formFuncionCruce.setModel(new DefaultComboBoxModel(new String[] {"Cruce 1","Cruce 2","Cruce PMX","Cruce OX"}));
 		formFuncionCruce.setSelectedIndex(0);
 		JPanel p13 = crearPanelInterno(new JLabel("F. cruce"), formFuncionCruce);
 		panelFormulario.add(p13);

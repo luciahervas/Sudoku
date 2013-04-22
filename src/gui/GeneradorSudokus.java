@@ -56,6 +56,22 @@ public class GeneradorSudokus
 		return r;
 	}
 	
+	public static int[][] _enunciadoResuleto()
+	{
+		int[] a = {5,4,8,7,3,1,9,6,2};
+		int[] b = {2,8,9,7,6,1,5,3,4};
+		int[] c = {5,6,3,9,4,1,8,7,2};
+		int[] d = {9,7,4,5,2,6,8,3,1};
+		int[] e = {5,4,1,9,2,6,8,3,7};
+		int[] f = {6,5,3,8,9,7,4,2,1};
+		int[] g = {7,6,3,4,5,2,1,8,9};
+		int[] h = {1,2,6,5,9,4,8,3,7};
+		int[] i = {6,7,5,8,9,4,1,2,3};
+		
+		int[][] r = {a,b,c,d,e,f,g,h,i};
+		return r;
+	}
+	
 	public static int[][] enunciadoTest1()
 	{		
 		int[][] m1 = 

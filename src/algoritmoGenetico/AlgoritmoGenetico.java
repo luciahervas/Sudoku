@@ -1,9 +1,9 @@
 package algoritmoGenetico;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import controlador.Parametros;
 
@@ -111,7 +111,7 @@ public class AlgoritmoGenetico
 			// 5) tratar la nueva solucion
 			pos_mejor = evaluarPoblacion(pob);
 			
-			if (i == 0) {	
+			if (mejor == null) {	
 				mejor = pob[pos_mejor].clone();
 			} else {
 				if (pob[pos_mejor].getAptitud() > mejor.getAptitud()){
@@ -123,7 +123,6 @@ public class AlgoritmoGenetico
 			mejoresCromosomas[i]=pob[pos_mejor].clone();
 			gokus[i]=mejor.clone();
 			medias[i]=calcularMedia(pob);
-			System.out.println(pob[pos_mejor].getAptitud());
 		}		
 	}
 
@@ -290,7 +289,7 @@ public class AlgoritmoGenetico
 		int tam = parametros.getTamPoblacion();
 		double puntuacion=0;
 		for (int i=0; i<tam; i++){
-			double beta = 1.5; //TODO: beta podría ser una parámetro de la aplicación
+			double beta = 1.5; 
 			double aux = ((double) (i-1)) / ( ((double)(tam)) - 1);
 			aux = 2*(beta-1)*aux;
 			aux = beta - aux;
@@ -299,10 +298,17 @@ public class AlgoritmoGenetico
 			
 			puntuacion += aux ;
 			pob[i].setPuntuacionAcumulada(puntuacion);
-
 		}
 		
-		// 3) llamar a ruleta
+		// 3) normalizamos
+		double punt=0;
+		for (int i=0; i<tam; i++){
+			
+			punt = pob[i].getPuntuacionAcumulada()/puntuacion ;
+			pob[i].setPuntuacionAcumulada(punt);
+		}
+		
+		// 4) llamar a ruleta
 		return seleccionRuleta(pob, parametros);
 	}
 	
@@ -510,7 +516,7 @@ public class AlgoritmoGenetico
 		// 5. Se cruzan los individuos elegidos en dos puntos al azar
 		int random1 = Operaciones.aleatorioEntre(0,8);
 		int random2 = Operaciones.aleatorioEntre(0,8);
-		// tien que ser (random1 < random2)
+		// tiene que ser (random1 < random2)
 		if (random1>random2){
 			int aux=random1;
 			random1=random2;
@@ -518,12 +524,17 @@ public class AlgoritmoGenetico
 		}
 		for (int i=0; i<numSelCruce; i+=2){
 			Cromosoma[] cromos = new Cromosoma[2];
+			cromos[0] = new Cromosoma();
+			cromos[1] = new Cromosoma();
 			for (int j=0; j<9; j++)
 			{
-				Gen[] gen = crucePMX(pob[selCruce[i]].getGenes()[i],pob[selCruce[i+1]].getGenes()[i], random1, random2, parametros);
-				cromos[0].setGen(i,gen[0]);
-				cromos[1].setGen(i,gen[1]);
+				Gen[] gen = crucePMX(pob[selCruce[i]].getGenes()[j],pob[selCruce[i+1]].getGenes()[j], random1, random2, parametros);
+				cromos[0].setGen(j,gen[0]);
+				cromos[1].setGen(j,gen[1]);
 			}
+			cromos[0].evaluarCromosoma();
+			cromos[1].evaluarCromosoma();
+			
 			//los nuevos individuos sustituyen a sus progenitores
 			pob[selCruce[i]]=cromos[0];
 			pob[selCruce[i+1]]=cromos[1];
@@ -618,8 +629,8 @@ public class AlgoritmoGenetico
 	{
 		
 		//Inicializamos los hijos
-		Cromosoma hijo=new Cromosoma(parametros.getFijos());
-		Cromosoma hija=new Cromosoma(parametros.getFijos());
+		Cromosoma hijo=new Cromosoma();
+		Cromosoma hija=new Cromosoma();
 		
 		// primera parte del intercambio: 
 		// copiar progenitor desde el principio hasta el punto de cruce
@@ -665,8 +676,8 @@ public class AlgoritmoGenetico
 	{
 		
 		//Inicializamos los hijos
-		Cromosoma hijo=new Cromosoma(parametros.getFijos());
-		Cromosoma hija=new Cromosoma(parametros.getFijos());
+		Cromosoma hijo=new Cromosoma();
+		Cromosoma hija=new Cromosoma();
 		
 		// primera parte del intercambio: 
 		// copiar progenitor desde el principio hasta el punto de cruce 1
@@ -704,90 +715,63 @@ public class AlgoritmoGenetico
 		
 	}
 	
-	/** 
-	 * Curce horrible
-	 * @return
-	 */
-	private Gen[] crucePMX(Gen padre, Gen madre, int puntoCruce1, int puntoCruce2, Parametros parametros)
-	{
-		Gen hijo = new Gen(padre.getCuadricula(), padre.getFijos());
-		Gen hija = new Gen(madre.getCuadricula(), madre.getFijos());
-		
-		LinkedList<Integer> listaNegraHijo = new LinkedList<Integer>();
-		LinkedList<Integer> listaNegraHija = new LinkedList<Integer>();
-		
-		// parte facil del cruce
-		for (int i = puntoCruce1; i < puntoCruce2; i++) {
-			hija.setNumero(i, padre.getCuadricula()[i]);
-			listaNegraHija.add(new Integer(padre.getCuadricula()[i]));
-			hijo.setNumero(i, madre.getCuadricula()[i]);
-			listaNegraHijo.add(new Integer(madre.getCuadricula()[i]));
-		}
-		
-		quitarRepes(listaNegraHija, listaNegraHijo);
-		
-		completarGen(hijo, listaNegraHijo, listaNegraHija);
-		completarGen(hija, listaNegraHija, listaNegraHijo);
-		
-		Gen[] r = {hijo, hija};
-		return r;
-	}
-	
-	private void quitarRepes(LinkedList<Integer> l1, LinkedList<Integer> l2)
-	{
-		Iterator<Integer> it = l1.iterator();
-		@SuppressWarnings("unchecked")
-		LinkedList<Integer> aux = (LinkedList<Integer>) l1.clone();
-		
-		while(it.hasNext()) {
-			Integer i = it.next();
-			if (estaEn(l2, i)) {
-				borroElemento(aux,i);
-				borroElemento(aux,i);
-			}	
-		}
-		
-		l1 = aux;
-		
-	}
-	
-	private void borroElemento(LinkedList<Integer> lista, Integer i) 
-	{
-		@SuppressWarnings("unchecked")
-		LinkedList<Integer> laux = (LinkedList<Integer>) lista.clone();
-		Iterator<Integer> it = laux.iterator();
-		
-		while(it.hasNext()){
-			Integer aux = it.next();
-			if (aux.equals(i)) {
-				lista.remove(aux);
-			}
-		}
-	}
-
-	private boolean estaEn(LinkedList<Integer> lista, Integer n)
-	{
-		Iterator<Integer> it = lista.iterator();
-		
-		while(it.hasNext()){
-			if (it.next().equals(n))
-				return true;
-		}
-		return false;
-	}
-	
 	/**
-	 * 
-	 * @param gen el que queremos completar
+	 * @param Cromosoma padre
+	 * @param Cromosoma madre
+	 * @param Cromosoma hijo1 (hijo)
+	 * @param Cromosoma hijo2 (hija)
+	 * @param puntoCruce
 	 */
-	private void completarGen(Gen gen, LinkedList<Integer> lista, LinkedList<Integer> listaDelOtro)
-	{
-		for (int i=0; i<9; i++) {
-			if (lista.contains(new Integer(gen.getCuadricula()[i]))) {
-				gen.setNumero(i, listaDelOtro.getFirst());
-				listaDelOtro.removeFirst();
-			}
+	public Gen[] crucePMX(Gen padre, Gen madre, int random1, int random2, Parametros parametros) 
+	{		
+		//Inicializamos los hijos
+		Gen hijo=new Gen(padre.getFijos());
+		Gen hija=new Gen(madre.getFijos());
+		ArrayList<Integer> usadoshijo=new ArrayList<Integer>();
+		ArrayList<Integer> usadoshija=new ArrayList<Integer>();
+		
+		for (int i=random1; i<random2; i++){
+			hijo.setNumero(i, padre.getCuadricula()[i]);
+			hija.setNumero(i, madre.getCuadricula()[i]);
+			if (usadoshijo.contains(madre.getCuadricula()[i]))
+				usadoshijo.remove((Integer)madre.getCuadricula()[i]);
+			else
+				usadoshija.add(madre.getCuadricula()[i]);
+
+			if (usadoshija.contains(padre.getCuadricula()[i]))
+				usadoshija.remove((Integer)padre.getCuadricula()[i]);
+			else
+				usadoshijo.add(padre.getCuadricula()[i]);
 		}
+		
+		Iterator<Integer> ithijo = usadoshijo.iterator();
+		Iterator<Integer> ithija = usadoshija.iterator();
+		for (int i=0; i<random1; i++){
+			if (usadoshijo.contains(madre.getCuadricula()[i]))
+				hijo.setNumero(i, ithija.next());
+			else
+				hijo.setNumero(i, madre.getCuadricula()[i]);
+			if (usadoshija.contains(padre.getCuadricula()[i]))
+				hija.setNumero(i, ithijo.next());
+			else
+				hija.setNumero(i, padre.getCuadricula()[i]);
+		}
+		
+		for (int i=random2; i<9; i++){
+			if (usadoshijo.contains(madre.getCuadricula()[i]))
+				hijo.setNumero(i, ithija.next());
+			else
+				hijo.setNumero(i, madre.getCuadricula()[i]);
+			if (usadoshija.contains(padre.getCuadricula()[i]))
+				hija.setNumero(i, ithijo.next());
+			else
+				hija.setNumero(i, padre.getCuadricula()[i]);
+		}
+		
+		Gen[] genes=new Gen[2];
+		genes[0]=hijo;
+		genes[1]=hija;
+		return genes;
 	}
 	
 	
@@ -803,6 +787,10 @@ public class AlgoritmoGenetico
 		double sumaAptitudes = 0;
 		
 		int pos_mejor = 0;
+		
+		for (int i = 0; i< poblacion.length; i++) {
+			poblacion[i].evaluarCromosoma();
+		}
 		
 		for (int i = 0; i< poblacion.length; i++) {
 			//Calculamos la suma de las aptitudes

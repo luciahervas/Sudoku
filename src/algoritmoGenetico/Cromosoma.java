@@ -11,6 +11,11 @@ public class Cromosoma
 	private static int funcAptitud;
 	
 	/* Constructoras */
+	public Cromosoma(){
+		genes = new Gen[9];
+		fenotipo = new int[9][9];
+	}
+	
 	public Cromosoma(int[][] fijos){
 		genes = new Gen[9];
 		for (int i=0; i<9; i++){
@@ -19,6 +24,8 @@ public class Cromosoma
 		fenotipo = new int[9][9];
 		evaluarCromosoma(); //Calcula fenotipo y aptitud
 	}
+
+	
 	public Cromosoma(Gen[] genes, int[][] fenotipo, int aptitud, double puntuacionAcumulada)
 	{
 		this.genes = genes;
@@ -43,7 +50,10 @@ public class Cromosoma
 	
 	@Override
 	public Cromosoma clone(){
-		return new Cromosoma(genes.clone(),fenotipo,aptitud,puntuacionAcumulada);
+		Gen[] aux = new Gen[9];
+		for (int i=0;i<9;i++)
+			aux[i]=genes[i].clone();
+		return new Cromosoma(aux,fenotipo.clone(),aptitud,puntuacionAcumulada);
 	}
 	
 	/**
@@ -69,18 +79,8 @@ public class Cromosoma
 	@Override
 	public String toString(){return this.fenotipo.toString();}
 	
-	/**
-	 * Calcular fenotipo de Manu
-	 */
-	private void calcularFenotipo()
-	{
-		for(int i=0; i<9; i++){ this.getFenotipo()[i] = genes[i].getCuadricula(); }
-	}
 	
-	/**
-	 * Calcular fenotipo de Lucia
-	 */
-	private void _calcularFenotipo()
+	private void calcularFenotipo()
 	{
 		for(int i=0; i<9; i++){
 			for(int j=0; j<9; j++){
@@ -93,8 +93,8 @@ public class Cromosoma
 	private int tranformar(Gen[] cromosoma, int i, int j) {
 		int x = i;
 		int y = j;
-		j = x/3 + (y/3)*3;
-		i = x%3 + (y%3)*3;
+		i = x/3 + (y/3)*3;
+		j = x%3 + (y%3)*3;
 		return cromosoma[i].getCuadricula()[j];
 	}
 	
@@ -108,11 +108,11 @@ public class Cromosoma
 			break;
 			case 1:
 				aux=calcularAptitudConSumatorio();
-				this.aptitud = aux;
+				this.aptitud = 405*9 - aux;
 			break;
 			case 2:
 				aux=calcularAptitudConFactorial();
-				this.aptitud = aux;
+				this.aptitud = 3265920*9 - aux;
 			break;
 		}				
 	}
@@ -123,22 +123,26 @@ public class Cromosoma
 		boolean[] mascara=new boolean[9];
 		for (int i=0; i<9; i++){
 			for (int j=0; j<9; j++){
-				if (mascara[fenotipo[i][j]-1])
+				int num = fenotipo[i][j]-1;
+				if (mascara[num])
 					repetidos++;
 				else
-					mascara[fenotipo[i][j]-1]=true;
+					mascara[num]=true;
 			}
 			mascara=new boolean[9];
 		}
 		for (int j=0; j<9; j++){
 			for (int i=0; i<9; i++){
-				if (mascara[fenotipo[i][j]-1])
+				int num = fenotipo[i][j]-1;
+				if (mascara[num])
 					repetidos++;
 				else
-					mascara[fenotipo[i][j]-1]=true;
+					mascara[num]=true;
 			}
 			mascara=new boolean[9];
 		}
+		//if (repetidos<10)
+			//return calcularAptitudConRepetidos();
 		return repetidos;
 	}
 	
@@ -149,7 +153,6 @@ public class Cromosoma
 			int suma = sumarFila(fenotipo[i]);
 			penalizacionSuma += Math.abs(suma - 45);
 		}
-		//return Math.abs(405 - penalizacionSuma); // XXX:  45 * 9 = 405
 		return penalizacionSuma;
 	}
 	
@@ -160,7 +163,6 @@ public class Cromosoma
 			int prod = multiplicarFila(fenotipo[i]);
 			penalizacionProd += Math.abs(prod - 362880);
 		}
-		// return Math.abs(3265920 - penalizacionProd); // XXX: 362880 * 9 = 3265920
 		return penalizacionProd;
 	}
 	

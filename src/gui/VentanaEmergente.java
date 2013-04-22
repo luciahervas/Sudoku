@@ -23,7 +23,6 @@ public class VentanaEmergente extends JFrame implements WindowListener
 		this.addWindowListener(this);
 		grafica = new Plot2DPanel();
 		this.add(grafica);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, FRAME_WEIGHT, FRAME_HEIGHT);
 		this.setResizable(false);
 	}
@@ -43,9 +42,9 @@ public class VentanaEmergente extends JFrame implements WindowListener
 		// definir la layenda de datos
 		grafica.addLegend("SOUTH");
 		// dibujar la grafica
-		grafica.addLinePlot("Cromosoma mejor de cada generaci—n", x, mejores);
+		grafica.addLinePlot("Cromosoma mejor de cada generación", x, mejores);
 		grafica.addLinePlot("Cromosoma mejor encontrado", x, gokus);
-		grafica.addLinePlot("Media de cada generaci—n", x, medias);
+		grafica.addLinePlot("Media de cada generación", x, medias);
 	}
 
 	@Override
@@ -56,13 +55,12 @@ public class VentanaEmergente extends JFrame implements WindowListener
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		this.dispose();		
 	}
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		this.setVisible(false);		
+		this.dispose();		
 	}
 
 	@Override

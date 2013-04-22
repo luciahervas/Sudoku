@@ -30,9 +30,29 @@ public class Controlador
 		double[] aptitudesGokus = obtenerAptitudes(gokus);
 		double[] aptitudesMejores = obtenerAptitudes(mejores);
 		double[] aptitudesMedias = genetico.getMedias();
+		volverMaximo(p,aptitudesGokus);
+		volverMaximo(p,aptitudesMejores);
+		volverMaximo(p,aptitudesMedias);
 		
+		
+		gokus[gokus.length - 1].evaluarCromosoma();
 		gui.pintaEsto(gokus[gokus.length - 1]);
 		ventanaEmergente.pinta(aptitudesGokus, aptitudesMejores, aptitudesMedias);
+	}
+	
+	private void volverMaximo(Parametros p,double[] vector){
+		for (int i=0; i<vector.length; i++)
+			switch(p.getFuncAptitud()) {
+				case 0:
+					vector[i] = 72 - vector[i]; 
+				break;
+				case 1:
+					vector[i] = 405*9 - vector[i];
+				break;
+				case 2:
+					vector[i] = 3265920*9 - vector[i];
+				break;
+			}
 	}
 	
 	private double[] obtenerAptitudes(Cromosoma[] array)
@@ -55,8 +75,10 @@ public class Controlador
 	public static void _main(String[] args)
 	{
 		AlgoritmoGenetico g = new AlgoritmoGenetico();
-		int[][] m1 = GeneradorSudokus.enunciadoTest1();
-		int[][] m2 = GeneradorSudokus.enunciadoTest2();
+		//int[][] m1 = GeneradorSudokus.enunciadoTest1();
+		//int[][] m2 = GeneradorSudokus.enunciadoTest2();
+		int[][] m1 = GeneradorSudokus.enunciadoSudoku1();
+		int[][] m2 = GeneradorSudokus.enunciadoSudoku2();
 		Cromosoma s1 = new Cromosoma(m1);
 		Cromosoma s2 = new Cromosoma(m2);
 		
@@ -68,7 +90,5 @@ public class Controlador
 				System.out.println("Correcto");
 			}
 		}
-		
-		// Cruces
 	}
 }
