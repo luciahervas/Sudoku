@@ -11,12 +11,14 @@ public class Controlador
 	private AlgoritmoGenetico genetico;
 	private Gui gui;
 	private VentanaEmergente ventanaEmergente;
+	private Cromosoma ultimaSolucion;
 	
 	public Controlador()
 	{
 		genetico = new AlgoritmoGenetico();
 		gui = new Gui(this);
 		ventanaEmergente = new VentanaEmergente();
+		ultimaSolucion = null;
 	}
 	
 	public void ejecutar()
@@ -26,6 +28,7 @@ public class Controlador
 		
 		Cromosoma[] gokus = genetico.getGokus();
 		Cromosoma[] mejores = genetico.getMejoresCromosomas();
+		this.ultimaSolucion = gokus[gokus.length - 1];
 		
 		double[] aptitudesGokus = obtenerAptitudes(gokus);
 		double[] aptitudesMejores = obtenerAptitudes(mejores);
@@ -34,10 +37,39 @@ public class Controlador
 		volverMaximo(p,aptitudesMejores);
 		volverMaximo(p,aptitudesMedias);
 		
-		
 		gokus[gokus.length - 1].evaluarCromosoma();
-		gui.pintaEsto(gokus[gokus.length - 1]);
+		gui.pintaEsto(ultimaSolucion);
 		ventanaEmergente.pinta(aptitudesGokus, aptitudesMejores, aptitudesMedias);
+	}
+	
+	public void remarcar()
+	{
+
+		if (ultimaSolucion != null) {
+			boolean[][] remarcar = new boolean[9][9];
+			int[][] matriz = ultimaSolucion.dameMatriz();
+			
+			for(int i=0; i<9; i++){
+				for(int j=0; j<9; j++){
+					if (estaNumero(matriz[i][j], matriz[i], j+1)){
+						remarcar[i][j] = true;
+					}
+				}
+			}
+			
+		gui.remarcaEsto(matriz,remarcar);
+		}
+		
+	}
+	
+	private boolean estaNumero(int numero, int[] vector, int desdeAqui)
+	{
+		if(desdeAqui >= 3) return false;
+		for (int i = desdeAqui; i<3; i++){
+			if (vector[i] == numero)
+				return true;
+		}
+		return false;
 	}
 	
 	private void volverMaximo(Parametros p,double[] vector){

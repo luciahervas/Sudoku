@@ -23,7 +23,7 @@ public class VentanaEmergente extends JFrame implements WindowListener
 		this.addWindowListener(this);
 		grafica = new Plot2DPanel();
 		this.add(grafica);
-		setBounds(100, 100, FRAME_WEIGHT, FRAME_HEIGHT);
+		setBounds(900, 210, FRAME_WEIGHT, FRAME_HEIGHT);
 		this.setResizable(false);
 	}
 	
@@ -42,9 +42,9 @@ public class VentanaEmergente extends JFrame implements WindowListener
 		// definir la layenda de datos
 		grafica.addLegend("SOUTH");
 		// dibujar la grafica
-		grafica.addLinePlot("Cromosoma mejor de cada generación", x, mejores);
+		grafica.addLinePlot("Cromosoma mejor de cada generacion", x, mejores);
 		grafica.addLinePlot("Cromosoma mejor encontrado", x, gokus);
-		grafica.addLinePlot("Media de cada generación", x, medias);
+		grafica.addLinePlot("Media de cada generacion", x, medias);
 	}
 
 	@Override

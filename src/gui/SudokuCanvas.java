@@ -13,6 +13,11 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 {
 
 	private static final long serialVersionUID = 1L;
+	private static final Color GRIS_CLARO = new Color(240,240,240);
+	private static final Color COLOR_NUMERO = new Color(11,72,107); // AZUL
+	private static final Color COLOR_ERRONEO = Color.RED;
+	private static final Color COLOR_REMARCADO 	= new Color(42,54,59); // GRIS
+	private static boolean ES_REMARCADO = false;
 	//--------------------ATRIBUTOS---------------------//
 	public int[][] tablero;
 	public boolean[][] fijos;
@@ -85,12 +90,16 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		int n;
 		String s;
 		for (int i=0; i<3; i++){
-			g.setColor(Color.WHITE);
+			g.setColor(GRIS_CLARO);
 			g.fillRect(xOrigen+6-10, yOrigen+6-26, M - 12, M - 12);
 			if (fijos[cuadrado][i]){
-				g.setColor(Color.RED);
+				if (ES_REMARCADO){
+					g.setColor(COLOR_ERRONEO);
+				} else {
+					g.setColor(COLOR_NUMERO);
+				}
 			} else {
-				g.setColor(Color.GRAY);
+				g.setColor(COLOR_REMARCADO);
 			}
 			n = tablero[cuadrado][i];
 			s = String.valueOf(n);
@@ -101,12 +110,16 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		xOrigen = a * M + 10;
 		yOrigen += M;
 		for (int i=3; i<6; i++){
-			g.setColor(Color.WHITE);
+			g.setColor(GRIS_CLARO);
 			g.fillRect(xOrigen+6-10, yOrigen+6-26, M - 12, M - 12);
 			if (fijos[cuadrado][i]){
-				g.setColor(Color.RED);
+				if (ES_REMARCADO){
+					g.setColor(COLOR_ERRONEO);
+				} else {
+					g.setColor(COLOR_NUMERO);
+				}
 			} else {
-				g.setColor(Color.GRAY);
+				g.setColor(COLOR_REMARCADO);
 			}
 			n = tablero[cuadrado][i];
 			s = String.valueOf(n);
@@ -117,12 +130,16 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		xOrigen = a * M + 10;
 		yOrigen += M;
 		for (int i=6; i<9; i++){
-			g.setColor(Color.WHITE);
+			g.setColor(GRIS_CLARO);
 			g.fillRect(xOrigen+6-10, yOrigen+6-26, M - 12, M - 12);
 			if (fijos[cuadrado][i]){
-				g.setColor(Color.RED);
+				if (ES_REMARCADO){
+					g.setColor(COLOR_ERRONEO);
+				} else {
+					g.setColor(COLOR_NUMERO);
+				}
 			} else {
-				g.setColor(Color.GRAY);
+				g.setColor(COLOR_REMARCADO);
 			}
 			n = tablero[cuadrado][i];
 			s = String.valueOf(n);
@@ -130,7 +147,7 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 				g.drawString(s, xOrigen, yOrigen);
 			xOrigen += M;
 		}		
-		
+		ES_REMARCADO = false;
 	}
 	
 	private void dibujarNumeros(Graphics g){
@@ -168,8 +185,9 @@ public class SudokuCanvas extends Canvas implements MouseListener, KeyListener
 		return coord;
 	}
 	
-	public void cambiarTablero(int[][] tableroNuevo, boolean[][] bofijos)
+	public void cambiarTablero(int[][] tableroNuevo, boolean[][] bofijos, boolean esRemarcado)
 	{
+		ES_REMARCADO = esRemarcado;
 		fijos=bofijos;
 		tablero=tableroNuevo;
 		this.repaint();
